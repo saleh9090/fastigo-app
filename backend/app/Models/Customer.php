@@ -1,0 +1,36 @@
+<?php
+
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Model;
+
+class Customer extends Model
+{
+    protected $fillable = [
+        'name',
+        'country_code',
+        'phone',
+        'email',
+        'active',
+    ];
+
+    protected function casts(): array
+    {
+        return [
+            'active' => 'boolean',
+        ];
+    }
+
+    public function bills()
+    {
+        return $this->hasMany(Bill::class);
+    }
+
+    public function getFullPhoneAttribute(): string
+    {
+        $countryCode = '+' . preg_replace('/\D+/', '', $this->country_code ?? '+968');
+        $phone = preg_replace('/\D+/', '', $this->phone ?? '');
+
+        return $countryCode . $phone;
+    }
+}
