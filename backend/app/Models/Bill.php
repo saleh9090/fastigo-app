@@ -53,4 +53,9 @@ class Bill extends Model
     {
         return $this->hasMany(BillItem::class);
     }
+
+    public function notifications()
+    {
+        return $this->hasMany(Notification::class);
+    }
 }

@@ -3,9 +3,12 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Laravel\Sanctum\HasApiTokens;
 
 class Customer extends Model
 {
+    use HasApiTokens;
+
     protected $fillable = [
         'name',
         'country_code',
@@ -24,6 +27,11 @@ class Customer extends Model
     public function bills()
     {
         return $this->hasMany(Bill::class);
+    }
+
+    public function notifications()
+    {
+        return $this->hasMany(Notification::class);
     }
 
     public function getFullPhoneAttribute(): string
