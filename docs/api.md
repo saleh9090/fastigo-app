@@ -146,6 +146,8 @@ GET /api/shop/branches
 POST /api/shop/branches
 PUT /api/shop/branches/{id}
 
+Company Managers can list and manage all branches for their company. Branch Employees can list only their assigned branch and cannot create or update branches.
+
 ---
 
 ### Employees
@@ -153,6 +155,8 @@ PUT /api/shop/branches/{id}
 GET /api/shop/employees
 POST /api/shop/employees
 PUT /api/shop/employees/{id}
+
+Company Managers can list and manage company managers and branch employees for their company. Branch Employees cannot manage employees.
 
 ---
 
