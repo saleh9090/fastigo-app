@@ -70,7 +70,7 @@ Stores shop users and employees.
 | phone      | string                     |
 | email      | string                     |
 | password   | string                     |
-| role       | owner / manager / employee |
+| role       | platform_admin / company_manager / branch_employee |
 | status     | active / inactive          |
 
 Relationship:

@@ -32,7 +32,7 @@ Fastigo is a SaaS platform with:
 ## Important
 Fastigo has two mobile apps:
 - `fastigo` for customers and public users.
-- `fastigo_business` for companies, shops, owners, managers, and employees.
+- `fastigo_business` for companies, Company Managers, and Branch Employees.
 
 Admin panel is only for the Fastigo platform owner and lives in `/admin`.
 

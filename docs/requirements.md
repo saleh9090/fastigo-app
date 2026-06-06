@@ -5,8 +5,8 @@
 Fastigo will have these main user roles:
 
 1. Platform Admin
-2. Shop Owner
-3. Shop Employee
+2. Company Manager
+3. Branch Employee
 4. Public Customer
 
 ---
@@ -33,11 +33,11 @@ The Platform Admin can:
 
 ## 3. Business App Requirements (`fastigo_business`)
 
-The `/mobile/fastigo_business` Flutter app is used by business managers and staff depending on each user's access level.
+The `/mobile/fastigo_business` Flutter app is used by Company Managers and Branch Employees depending on each user's access level.
 
-### Shop Owner Requirements
+### Company Manager Requirements
 
-The Shop Owner can:
+The Company Manager can:
 
 * Login to shop application
 * View dashboard
@@ -61,9 +61,9 @@ The Shop Owner can:
 
 ---
 
-## 4. Shop Employee Requirements
+## 4. Branch Employee Requirements
 
-The Shop Employee can:
+The Branch Employee can:
 
 * Login to shop application
 * Create bills

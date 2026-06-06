@@ -5,7 +5,7 @@ Fastigo is a SaaS platform for companies to manage bills, statuses, expenses, an
 ## Repository Structure
 
 - `admin/` - Laravel API and Filament admin panel for the Fastigo platform owner.
-- `mobile/fastigo_business/` - Flutter app for companies, shops, owners, managers, and employees.
+- `mobile/fastigo_business/` - Flutter app for companies, Company Managers, and Branch Employees.
 - `mobile/fastigo/` - Flutter app for public customers to track bills, notifications, and subscriptions.
 - `docs/` - Product vision, architecture, requirements, database plan, API plan, screens, and roadmap.
 

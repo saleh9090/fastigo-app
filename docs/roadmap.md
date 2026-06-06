@@ -104,7 +104,7 @@ Tasks:
 
 Deliverable:
 
-* Business managers and staff can manage bills, expenses, reports, branches, and subscription information according to their user level
+* Company Managers and Branch Employees can manage bills, expenses, reports, branches, and subscription information according to their user level
 
 ---
 

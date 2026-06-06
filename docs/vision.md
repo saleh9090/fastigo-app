@@ -91,7 +91,7 @@ When the order is completed, the final status becomes:
 This Flutter application lives in `/mobile/fastigo_business` and is for companies and shops subscribed to Fastigo.
 
 The company or shop can use this application to manage daily operations.
-It will be used by business managers and staff depending on each user's access level.
+It will be used by Company Managers and Branch Employees depending on each user's access level.
 
 ### fastigo_business App Features
 
@@ -113,8 +113,8 @@ It will be used by business managers and staff depending on each user's access l
 * Combined company reports
 * User permissions by branch
 
-Business managers can view and manage all branches allowed for their company account.
-Staff users can access only the branches and actions allowed by their user level.
+Company Managers can view and manage all branches allowed for their company account.
+Branch Employees can access only the branches and actions allowed by their user level.
 
 ## 4. Website
 
