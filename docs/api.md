@@ -124,6 +124,8 @@ GET /api/shop/reports/expenses
 GET /api/shop/reports/profit
 GET /api/shop/reports/branches
 
+Report endpoints accept optional `start_date` and `end_date` query parameters in `YYYY-MM-DD` format. Company Managers can view all company branches. Branch Employees can view only their assigned branch data.
+
 ---
 
 ### Branches

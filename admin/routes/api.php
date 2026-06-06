@@ -8,6 +8,7 @@ use App\Http\Controllers\Api\Shop\ShopBillController;
 use App\Http\Controllers\Api\Shop\ShopDashboardController;
 use App\Http\Controllers\Api\Shop\ShopExpenseController;
 use App\Http\Controllers\Api\Shop\ShopProductController;
+use App\Http\Controllers\Api\Shop\ShopReportController;
 use Illuminate\Support\Facades\Route;
 
 Route::prefix('customer')->name('customer.')->group(function () {
@@ -41,5 +42,9 @@ Route::prefix('shop')->name('shop.')->group(function () {
         Route::get('expenses', [ShopExpenseController::class, 'index'])->name('expenses.index');
         Route::post('expenses', [ShopExpenseController::class, 'store'])->name('expenses.store');
         Route::get('expense-categories', [ShopExpenseController::class, 'categories'])->name('expense-categories.index');
+        Route::get('reports/sales', [ShopReportController::class, 'sales'])->name('reports.sales');
+        Route::get('reports/expenses', [ShopReportController::class, 'expenses'])->name('reports.expenses');
+        Route::get('reports/profit', [ShopReportController::class, 'profit'])->name('reports.profit');
+        Route::get('reports/branches', [ShopReportController::class, 'branches'])->name('reports.branches');
     });
 });

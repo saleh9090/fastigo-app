@@ -241,6 +241,8 @@ The business application should show:
 - Top products
 - Charts for sales and expenses
 
+Report API data must be isolated by company. Company Managers can view all branches for their company. Branch Employees can view only report data for their assigned branch.
+
 ## 16. MVP Requirements
 
 The first MVP should include:
