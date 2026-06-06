@@ -16,15 +16,8 @@ Fastigo will have these main user roles:
 The Platform Admin can:
 
 * Login to admin panel
-* Add, edit, disable shops
-* Manage shop/company details
-* Manage commercial registration number
-* Manage responsible person details
-* Manage contact details
+* Manage Company details
 * Manage subscription packages
-* Set subscription start date
-* Set subscription end date
-* Activate or suspend a shop
 * View general statistics
 * Manage website content
 * Manage application settings
