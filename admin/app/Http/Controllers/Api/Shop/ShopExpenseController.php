@@ -8,6 +8,7 @@ use App\Models\ExpenseCategory;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
+use Illuminate\Validation\ValidationException;
 
 class ShopExpenseController extends Controller
 {
@@ -22,6 +23,7 @@ class ShopExpenseController extends Controller
         $expenses = Expense::query()
             ->with(['branch', 'expenseCategory'])
             ->where('company_id', $user->company_id)
+            ->when($this->isBranchEmployee($user), fn ($query) => $query->where('branch_id', $user->branch_id))
             ->latest()
             ->get()
             ->map(fn (Expense $expense): array => $this->formatExpense($expense));
@@ -36,6 +38,10 @@ class ShopExpenseController extends Controller
         $user = $this->shopUser($request);
 
         if (! $user || ! $user->company_id) {
+            return $this->forbiddenResponse();
+        }
+
+        if ($this->isBranchEmployee($user) && ! $user->branch_id) {
             return $this->forbiddenResponse();
         }
 
@@ -55,6 +61,16 @@ class ShopExpenseController extends Controller
             'expense_date' => ['required', 'date'],
             'notes' => ['nullable', 'string'],
         ]);
+
+        if ($this->isBranchEmployee($user)) {
+            if (! empty($validated['branch_id']) && (int) $validated['branch_id'] !== (int) $user->branch_id) {
+                throw ValidationException::withMessages([
+                    'branch_id' => 'Branch employees can create expenses only for their assigned branch.',
+                ]);
+            }
+
+            $validated['branch_id'] = $user->branch_id;
+        }
 
         $expense = Expense::create([
             'company_id' => $user->company_id,
@@ -118,6 +134,11 @@ class ShopExpenseController extends Controller
         $user = $request->user();
 
         return $user instanceof User ? $user : null;
+    }
+
+    private function isBranchEmployee(User $user): bool
+    {
+        return $user->role === 'branch_employee';
     }
 
     private function forbiddenResponse()

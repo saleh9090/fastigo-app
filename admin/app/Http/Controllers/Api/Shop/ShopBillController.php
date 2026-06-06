@@ -26,6 +26,7 @@ class ShopBillController extends Controller
         $bills = Bill::query()
             ->with(['customer'])
             ->where('company_id', $user->company_id)
+            ->when($this->isBranchEmployee($user), fn ($query) => $query->where('branch_id', $user->branch_id))
             ->latest()
             ->paginate($perPage)
             ->through(fn (Bill $bill): array => $this->formatBillSummary($bill));
@@ -41,7 +42,7 @@ class ShopBillController extends Controller
             return $this->shopUserForbiddenResponse();
         }
 
-        if (! $this->billBelongsToUserCompany($bill, $user)) {
+        if (! $this->userCanAccessBill($bill, $user)) {
             return $this->billForbiddenResponse();
         }
 
@@ -65,6 +66,10 @@ class ShopBillController extends Controller
             return $this->shopUserForbiddenResponse();
         }
 
+        if ($this->isBranchEmployee($user) && ! $user->branch_id) {
+            return $this->shopUserForbiddenResponse();
+        }
+
         $user->loadMissing(['company.subscriptionPackage']);
 
         if (! $user->company?->canCreateBills()) {
@@ -84,6 +89,16 @@ class ShopBillController extends Controller
             'payment_status' => ['nullable', Rule::in(['unpaid', 'partial', 'paid'])],
             'status' => ['nullable', Rule::in(['in_process', 'ready', 'delivered'])],
         ]);
+
+        if ($this->isBranchEmployee($user)) {
+            if (! empty($validated['branch_id']) && (int) $validated['branch_id'] !== (int) $user->branch_id) {
+                throw ValidationException::withMessages([
+                    'branch_id' => 'Branch employees can create bills only for their assigned branch.',
+                ]);
+            }
+
+            $validated['branch_id'] = $user->branch_id;
+        }
 
         $customer = $this->resolveCustomer($validated);
         $customerPhone = $this->normalizeCustomerPhoneForBill($validated['customer_phone']);
@@ -114,7 +129,7 @@ class ShopBillController extends Controller
             return $this->shopUserForbiddenResponse();
         }
 
-        if (! $this->billBelongsToUserCompany($bill, $user)) {
+        if (! $this->userCanAccessBill($bill, $user)) {
             return $this->billForbiddenResponse();
         }
 
@@ -142,7 +157,7 @@ class ShopBillController extends Controller
             return $this->shopUserForbiddenResponse();
         }
 
-        if (! $this->billBelongsToUserCompany($bill, $user)) {
+        if (! $this->userCanAccessBill($bill, $user)) {
             return $this->billForbiddenResponse();
         }
 
@@ -174,6 +189,24 @@ class ShopBillController extends Controller
     private function billBelongsToUserCompany(Bill $bill, User $user): bool
     {
         return (int) $bill->company_id === (int) $user->company_id;
+    }
+
+    private function userCanAccessBill(Bill $bill, User $user): bool
+    {
+        if (! $this->billBelongsToUserCompany($bill, $user)) {
+            return false;
+        }
+
+        if ($this->isBranchEmployee($user)) {
+            return (int) $bill->branch_id === (int) $user->branch_id;
+        }
+
+        return true;
+    }
+
+    private function isBranchEmployee(User $user): bool
+    {
+        return $user->role === 'branch_employee';
     }
 
     private function resolveCustomer(array $validated): Customer

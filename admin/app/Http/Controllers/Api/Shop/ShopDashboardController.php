@@ -26,16 +26,19 @@ class ShopDashboardController extends Controller
 
         $todayBillsQuery = Bill::query()
             ->where('company_id', $companyId)
+            ->when($this->isBranchEmployee($user), fn ($query) => $query->where('branch_id', $user->branch_id))
             ->whereDate('created_at', $today);
 
         $todaySales = (float) (clone $todayBillsQuery)->sum('total_amount');
         $todayExpenses = (float) Expense::query()
             ->where('company_id', $companyId)
+            ->when($this->isBranchEmployee($user), fn ($query) => $query->where('branch_id', $user->branch_id))
             ->whereDate('expense_date', $today)
             ->sum('amount');
 
         $latestBills = Bill::query()
             ->where('company_id', $companyId)
+            ->when($this->isBranchEmployee($user), fn ($query) => $query->where('branch_id', $user->branch_id))
             ->latest()
             ->limit(5)
             ->get()
@@ -57,6 +60,7 @@ class ShopDashboardController extends Controller
             'bills_delivered' => (clone $todayBillsQuery)->where('status', 'delivered')->count(),
             'total_customers' => Bill::query()
                 ->where('company_id', $companyId)
+                ->when($this->isBranchEmployee($user), fn ($query) => $query->where('branch_id', $user->branch_id))
                 ->distinct()
                 ->count('customer_phone'),
             'total_products' => Product::query()
@@ -76,5 +80,10 @@ class ShopDashboardController extends Controller
         $user = $request->user();
 
         return $user instanceof User ? $user : null;
+    }
+
+    private function isBranchEmployee(User $user): bool
+    {
+        return $user->role === 'branch_employee';
     }
 }

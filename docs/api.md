@@ -126,6 +126,8 @@ GET /api/shop/reports/branches
 
 Report endpoints accept optional `start_date` and `end_date` query parameters in `YYYY-MM-DD` format. Company Managers can view all company branches. Branch Employees can view only their assigned branch data.
 
+All authenticated shop API endpoints must enforce company isolation. Branch Employees must be scoped to their assigned branch for bills, expenses, dashboard data, and reports. Company Managers can access all branches inside their company.
+
 ---
 
 ### Branches
