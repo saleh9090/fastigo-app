@@ -16,6 +16,7 @@
 - Server target: Ubuntu 24 LTS, Nginx, PHP 8.4
 
 The `/admin` app owns the platform admin panel and the API used by both mobile apps.
+The default Laravel database connection is MySQL, with local database name `fastigo`.
 
 ## Mobile Apps
 

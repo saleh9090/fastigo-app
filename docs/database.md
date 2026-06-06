@@ -4,6 +4,8 @@
 
 The database is designed as a SaaS multi-tenant system.
 
+Fastigo uses MySQL as the default production and local development database for the Laravel app in `/admin`.
+
 One company can have:
 
 * Multiple branches
