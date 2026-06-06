@@ -79,6 +79,8 @@ Statuses:
 GET /api/shop/customers
 GET /api/shop/customers/{id}
 
+Shop customer lists are derived from bills created by the authenticated user's company. Branch Employees see only customers connected to bills in their assigned branch.
+
 ---
 
 ### Categories

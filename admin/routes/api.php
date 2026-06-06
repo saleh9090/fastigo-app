@@ -47,6 +47,7 @@ Route::prefix('shop')->name('shop.')->group(function () {
         Route::get('products', [ShopProductController::class, 'index'])->name('products.index');
         Route::get('product-categories', [ShopProductController::class, 'categories'])->name('product-categories.index');
         Route::get('customers', [ShopDashboardController::class, 'customers'])->name('customers.index');
+        Route::get('customers/{customer}', [ShopDashboardController::class, 'customer'])->name('customers.show');
         Route::get('expenses', [ShopExpenseController::class, 'index'])->name('expenses.index');
         Route::post('expenses', [ShopExpenseController::class, 'store'])->name('expenses.store');
         Route::put('expenses/{expense}', [ShopExpenseController::class, 'update'])->name('expenses.update');
