@@ -31,16 +31,8 @@ This application is used by the Fastigo platform owner to manage the SaaS system
 
 The admin can manage:
 
-* Shops / companies
-* Commercial registration number
-* Responsible person details
-* Contact details
-* Business type
-* Subscription package
-* Subscription start date
-* Subscription end date
-* Subscription status
-* Branches
+* Company details
+* Subscription details
 * Website content
 * Application settings
 * General reports
