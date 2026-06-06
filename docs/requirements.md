@@ -25,7 +25,6 @@ The Platform Admin can:
 * Set subscription start date
 * Set subscription end date
 * Activate or suspend a shop
-* Manage branches
 * View general statistics
 * Manage website content
 * Manage application settings
@@ -34,7 +33,7 @@ The Platform Admin can:
 
 ## 3. Business App Requirements (`fastigo_business`)
 
-The `/mobile/fastigo_business` Flutter app is used by Shop Owners, Managers, and Employees.
+The `/mobile/fastigo_business` Flutter app is used by business managers and staff depending on each user's access level.
 
 ### Shop Owner Requirements
 
@@ -58,6 +57,7 @@ The Shop Owner can:
 * View net profit
 * View charts
 * View subscription information
+* View and manage branch sales, branch expenses, and combined company reports depending on user level
 
 ---
 
@@ -219,7 +219,7 @@ The first MVP should include:
 
 * Platform admin panel
 * Add and manage shops
-* Add and manage branches
+* Manage branches and staff access levels in the business app
 * Shop login
 * Create bills
 * Update bill status

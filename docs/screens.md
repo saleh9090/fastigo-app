@@ -132,6 +132,15 @@
 * Sales Report
 * Expense Report
 * Net Profit Report
+* Branch Sales Report
+* Branch Expense Report
+* Combined Company Report
+
+### Branch Access
+
+* Branches List
+* Staff Branch Permissions
+* User Level Permissions
 
 ### Charts
 

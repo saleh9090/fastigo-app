@@ -66,7 +66,6 @@ Tasks:
 * Admin login
 * Dashboard statistics
 * Manage companies
-* Manage branches
 * Manage shop users
 * Manage subscription packages
 * Manage subscription dates
@@ -100,10 +99,12 @@ Tasks:
 * View expense report
 * View net profit
 * View charts
+* Manage branch access depending on user level
+* Show branch sales, branch expenses, and combined company reports
 
 Deliverable:
 
-* Company/shop users can manage bills, expenses, reports, and subscription information
+* Business managers and staff can manage bills, expenses, reports, branches, and subscription information according to their user level
 
 ---
 
@@ -177,24 +178,7 @@ Deliverable:
 
 ---
 
-## Phase 7: Branch Management
-
-Goal: Support companies with multiple branches.
-
-Tasks:
-
-* Connect branches to one company
-* Allow users to access specific branches
-* Show branch-based reports
-* Show combined company reports
-
-Deliverable:
-
-* One company can manage multiple branches
-
----
-
-## Phase 8: Website
+## Phase 7: Website
 
 Goal: Create the public marketing website.
 
@@ -219,7 +203,7 @@ Deliverable:
 
 ---
 
-## Phase 9: Future Features
+## Phase 8: Future Features
 
 Possible future features:
 
