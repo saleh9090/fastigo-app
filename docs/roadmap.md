@@ -1,249 +1,126 @@
-# Fastigo Roadmap
+# Fastigo Roadmap V2
 
-## Phase 0: Project Setup
-
-Goal: Prepare the project structure and documentation.
-
-Tasks:
-
-* Create GitHub repository
-* Create project folders
-* Create documentation files
-* Define vision
-* Define requirements
-* Define database structure
-* Define screens
-* Define MVP scope
-
-Status: In Progress
+## Phase 0 — Planning & Documentation
+- Project Structure
+- AGENTS.md
+- Database Design
+- API Standards
+- User Roles Definition
+- Screen Flow
+- MVP Definition
 
 ---
 
-## Phase 1: Admin/API Foundation
+## Phase 1 — SaaS Core Foundation
+### Database
+- subscription_packages
+- companies
+- branches
+- users
+- customers
+- categories
+- items
+- bills
+- bill_items
+- bill_status_histories
+- expense_categories
+- expenses
+- notifications
+- otp_verifications
 
-Goal: Build the main Laravel API and Filament admin panel in `/admin`.
+### Authentication
+- Platform Admin (Email + Password)
+- Company Users (Mobile + Password)
+- Customer (Mobile + WhatsApp OTP)
 
-Technology:
-
-* Laravel
-* MySQL
-* Laravel Sanctum
-* Filament Admin Panel
-
-Tasks:
-
-* Install Laravel
-* Configure database
-* Create authentication system
-* Create companies table
-* Create branches table
-* Create users table
-* Create customers table
-* Create bills table
-* Create bill_items table
-* Create categories table
-* Create items table
-* Create expenses table
-* Create notifications table
-* Create subscription_packages table
-* Create otp_verifications table
-* Build API routes
-* Build admin panel resources
-
-Deliverable:
-
-* Working API from `/admin`
-* Working Filament admin panel from `/admin`
+### Deliverable
+- Database Complete
+- Authentication Complete
+- Multi-Tenant Ready
 
 ---
 
-## Phase 2: Admin Panel
-
-Goal: Create the Fastigo platform owner dashboard.
-
-Tasks:
-
-* Admin login
-* Dashboard statistics
-* Manage companies
-* Manage shop users
-* Manage subscription packages
-* Manage subscription dates
-* Activate and suspend companies
-* Manage website content
-* Manage system settings
-
-Deliverable:
-
-* Platform admin can manage Fastigo SaaS clients
+## Phase 2 — Platform Admin Panel
+### Modules
+- Dashboard
+- Companies
+- Subscription Packages
+- System Settings
 
 ---
 
-## Phase 3: fastigo_business Mobile Application
-
-Goal: Build the Flutter mobile app for companies and shops in `/mobile/fastigo_business`.
-
-Tasks:
-
-* Business user login
-* Dashboard
-* Create bill
-* Add customer mobile number
-* Add bill items
-* Update bill status
-* Manage items
-* Manage categories
-* Manage expenses
-* Manage expense categories
-* View sales report
-* View expense report
-* View net profit
-* View charts
-* Manage branch access depending on user level
-* Show branch sales, branch expenses, and combined company reports
-
-Deliverable:
-
-* Company Managers and Branch Employees can manage bills, expenses, reports, branches, and subscription information according to their user level
+## Phase 3 — Company Management
+### Features
+- Manage Branches
+- Manage Employees
+- Manage Services
+- Manage Products
+- Manage Expense Categories
+- View Company Reports
 
 ---
 
-## Phase 4: fastigo Customer Mobile Application
-
-Goal: Build the public Flutter customer app in `/mobile/fastigo`.
-
-Tasks:
-
-* Login by mobile number
-* WhatsApp OTP verification
-* View customer bills
-* View bill status
-* View bill details
-* Receive notifications
-* View notification history
-* View customer-facing subscription or membership information
-* Profile and logout
-
-Deliverable:
-
-* Customer can track all bills linked to his mobile number
+## Phase 4 — Fastigo Business App
+### Features
+- Create Bill
+- Add Customer
+- Add Services
+- Add Products
+- Print Receipt
+- Update Status
+- Manage Expenses
+- Reports
 
 ---
 
-## Phase 5: Notifications
-
-Goal: Notify customers when bill events happen.
-
-Events:
-
-* New bill created
-* Bill status changed to Ready
-* Bill status changed to Delivered
-
-Channels:
-
-* In-app notification
-* Push notification
-* WhatsApp notification in future
-
-Deliverable:
-
-* Customer receives bill updates
+## Phase 5 — Customer App
+### Features
+- Mobile Login
+- WhatsApp OTP
+- View Bills
+- Bill Tracking
+- Notifications
+- Profile
 
 ---
 
-## Phase 6: Reports and Charts
-
-Goal: Give shops useful business insights.
-
-Reports:
-
-* Daily sales
-* Monthly sales
-* Daily expenses
-* Monthly expenses
-* Net profit
-* Sales by branch
-* Expenses by branch
-
-Charts:
-
-* Sales chart
-* Expenses chart
-* Profit chart
-
-Deliverable:
-
-* Shop owner can understand business performance
+## Phase 6 — Notifications Engine
+- In-App Notifications
+- Push Notifications
+- WhatsApp Notifications
 
 ---
 
-## Phase 7: Website
-
-Goal: Create the public marketing website.
-
-Pages:
-
-* Home
-* Features
-* Pricing
-* Contact
-* Support
-
-Admin Control:
-
-* Edit homepage content
-* Edit features
-* Edit pricing
-* Edit contact details
-
-Deliverable:
-
-* Public website managed from admin panel
+## Phase 7 — Reports & Analytics
+- Sales Reports
+- Expense Reports
+- Profit Reports
+- Branch Reports
+- Customer Reports
 
 ---
 
-## Phase 8: Future Features
-
-Possible future features:
-
-* Online payments
-* Customer loyalty points
-* Customer reviews
-* PDF invoices
-* WhatsApp message templates
-* Advanced analytics
-* Subscription billing automation
-* Accounting system integration
-* Multi-language support
-* White-label shop app
+## Phase 8 — Website
+- Home
+- Features
+- Pricing
+- Contact
+- FAQ
 
 ---
 
-## MVP Scope
-
-The first MVP should include:
-
-* Laravel API and Filament admin panel in `/admin`
-* `fastigo_business` company/shop app
-* `fastigo` customer/public app
-* Company management
-* Branch management
-* Bill creation
-* Bill status tracking
-* Customer login with mobile number
-* WhatsApp OTP
-* Basic notifications
-* Basic sales and expense reports
+## Phase 9 — Commercial Launch
+- Security Audit
+- Load Testing
+- Backup Strategy
+- Monitoring
+- Error Tracking
 
 ---
 
-## Recommended Build Order
-
-1. Admin database and API
-2. Filament admin panel
-3. `fastigo_business` app
-4. `fastigo` app
-5. Notifications
-6. Reports and charts
-7. Website
+## Phase 10 — Future Expansion
+- Loyalty Points
+- Online Payments
+- Accounting Integration
+- White Label
+- AI Features
