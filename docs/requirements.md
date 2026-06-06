@@ -4,27 +4,24 @@
 
 Fastigo will have these main user roles:
 
-1. Platform Admin
-2. Company Manager
-3. Branch Employee
-4. Public Customer
-
----
+- Platform Admin
+- Company Manager
+- Branch Employee
+- Public Customer
 
 ## 2. Platform Admin Requirements
 
 The Platform Admin can:
 
-* Login to admin panel
-* Manage Company details
-* Manage subscription packages
-* View general statistics
-* Manage website content
-* Manage application settings
+- Login to admin panel
+- Manage company details
+- Manage subscription packages
+- View general statistics
+- Manage website content
+- Manage application settings
+- Suspend or activate companies
 
----
-
-## 3. Business App Requirements (`fastigo_business`)
+## 3. Business App Requirements (fastigo_business)
 
 The `/mobile/fastigo_business` Flutter app is used by Company Managers and Branch Employees depending on each user's access level.
 
@@ -32,193 +29,227 @@ The `/mobile/fastigo_business` Flutter app is used by Company Managers and Branc
 
 The Company Manager can:
 
-* Login to shop application
-* View dashboard
-* Manage shop profile
-* Manage branches
-* Add employees
-* Manage employee permissions
-* Create bills
-* View all bills
-* Update bill status
-* Manage item categories
-* Manage items
-* Manage expenses
-* Manage expense categories
-* View sales reports
-* View expense reports
-* View net profit
-* View charts
-* View subscription information
-* View and manage branch sales, branch expenses, and combined company reports depending on user level
+- Login to business application
+- View dashboard
+- Manage company profile
+- Manage branches
+- Add employees
+- Manage employee permissions
+- Create bills
+- View all bills
+- Update bill status
+- Manage item categories
+- Manage items
+- Manage expenses
+- Manage expense categories
+- View sales reports
+- View expense reports
+- View net profit
+- View charts
+- View subscription information
+- View and manage branch sales, branch expenses, and combined company reports depending on user level
 
----
-
-## 4. Branch Employee Requirements
+### Branch Employee Requirements
 
 The Branch Employee can:
 
-* Login to shop application
-* Create bills
-* Add customer mobile number
-* Add bill items
-* Update bill status
-* Mark bill as In Process
-* Mark bill as Ready
-* Mark bill as Delivered
-* View bills depending on permission
+- Login to business application
+- Create bills
+- Add customer mobile number
+- Add customer name, optional
+- Add bill items
+- Update bill status
+- Mark bill as In Process
+- Mark bill as Ready
+- Mark bill as Delivered
+- View bills depending on permission
 
----
-
-## 5. Public Customer App Requirements (`fastigo`)
+## 4. Public Customer App Requirements (fastigo)
 
 The `/mobile/fastigo` Flutter app is used by public customers.
 
 The Public Customer can:
 
-* Login using mobile number
-* Receive WhatsApp OTP
-* Verify login
-* View all bills connected to his mobile number
-* View bill status
-* Receive notification when a new bill is created
-* Receive notification when bill status changes
-* View shop name for each bill
-* View bill date and amount
-* View customer-facing subscription or membership information when enabled
+- Login using mobile number
+- Receive WhatsApp OTP
+- Verify login
+- View all bills connected to his mobile number
+- View bill status
+- Receive notification when a new bill is created
+- Receive notification when bill status changes
+- View company name for each bill
+- View branch name for each bill
+- View bill date and amount
+- View customer-facing subscription or membership information when enabled
 
----
+## 5. Customer Requirements
+
+Each customer should include:
+
+- Company ID
+- Mobile number
+- Customer name, optional
+- Created date
+- Updated date
+
+Customers are created automatically when a company creates a bill using a customer mobile number.
 
 ## 6. Bill Requirements
 
 Each bill should include:
 
-* Bill number
-* Shop ID
-* Branch ID
-* Customer mobile number
-* Customer name, optional
-* Bill items
-* Total amount
-* Paid amount
-* Remaining amount
-* Payment status
-* Bill status
-* Created date
-* Updated date
-
----
+- Bill number
+- Company ID
+- Branch ID
+- Customer ID
+- Customer mobile number
+- Customer name, optional
+- Bill items
+- Total amount
+- Paid amount
+- Remaining amount
+- Payment status
+- Payment method
+- Bill status
+- Created date
+- Updated date
 
 ## 7. Bill Statuses
 
 The first version will use:
 
-* In Process
-* Ready
-* Delivered
+- In Process
+- Ready
+- Delivered
 
 Future statuses may include:
 
-* Cancelled
-* Waiting Payment
-* Refunded
-
----
+- Cancelled
+- Waiting Payment
+- Refunded
 
 ## 8. Payment Statuses
 
 Payment status can be:
 
-* Unpaid
-* Partially Paid
-* Paid
+- Unpaid
+- Partially Paid
+- Paid
 
----
+## 9. Payment Methods
 
-## 9. Item Requirements
+Payment method can be:
+
+- Cash
+- Card
+- Bank Transfer
+- Mixed
+
+## 10. Item Requirements
 
 Each item should include:
 
-* Item name
-* Category
-* Price
-* Quantity
-* Total
-* Active or inactive status
+- Item name
+- Category
+- Item type: Service or Product
+- Price
+- Active or inactive status
 
----
+The item type controls whether the item is treated as a service or a product.
 
-## 10. Expense Requirements
+## 11. Bill Item Requirements
+
+Each bill item should include:
+
+- Bill ID
+- Item ID
+- Item name
+- Item type
+- Price
+- Quantity
+- Total
+
+## 12. Expense Requirements
 
 Each expense should include:
 
-* Expense title
-* Expense category
-* Amount
-* Date
-* Notes
-* Branch ID
-* Created by user
+- Expense title
+- Expense category
+- Amount
+- Date
+- Notes
+- Company ID
+- Branch ID
+- Created by user
 
----
-
-## 11. Notification Requirements
+## 13. Notification Requirements
 
 The system should send notifications when:
 
-* A shop creates a new bill using a customer mobile number
-* A shop changes bill status to Ready
-* A shop changes bill status to Delivered
+- A company creates a new bill using a customer mobile number
+- A company changes bill status to Ready
+- A company changes bill status to Delivered
 
 Notification channels:
 
-* Mobile app notification
-* WhatsApp message, optional in future
+- Mobile app notification
+- WhatsApp message, optional in future
 
----
+WhatsApp is required for OTP only in the MVP.
 
-## 12. SaaS Requirements
+## 14. SaaS Requirements
 
 The system should support:
 
-* Multiple shops
-* Multiple branches under one company
-* Separate data for each shop
-* Subscription packages
-* Subscription expiry
-* Shop suspension if subscription is inactive
-* Role-based permissions
+- Multiple companies
+- Multiple branches under one company
+- Separate data for each company
+- Subscription packages
+- Subscription expiry
+- Company suspension if subscription is inactive
+- Role-based permissions
 
----
+Each subscription package should include:
 
-## 13. Reports Requirements
+- Package name
+- Monthly price
+- Yearly price
+- Maximum branches
+- Maximum employees
+- Active or inactive status
 
-The shop application should show:
+## 15. Reports Requirements
 
-* Total sales
-* Total expenses
-* Net profit
-* Sales by date
-* Expenses by date
-* Sales by branch
-* Expenses by branch
-* Charts for sales and expenses
+The business application should show:
 
----
+- Total sales
+- Total expenses
+- Net profit
+- Sales by date
+- Expenses by date
+- Sales by branch
+- Expenses by branch
+- Sales by employee
+- Bills by status
+- Top services
+- Top products
+- Charts for sales and expenses
 
-## 14. MVP Requirements
+## 16. MVP Requirements
 
 The first MVP should include:
 
-* Platform admin panel
-* Add and manage shops
-* Manage branches and staff access levels in the business app
-* Shop login
-* Create bills
-* Update bill status
-* Customer login by mobile number
-* WhatsApp OTP verification
-* Customer bill list
-* Customer bill status tracking
-* Basic notifications
-* Basic sales and expense reports
+- Platform admin panel
+- Add and manage companies
+- Add and manage branches
+- Manage staff access levels in the business app
+- Business app login
+- Create bills
+- Update bill status
+- Customer login by mobile number
+- WhatsApp OTP verification
+- Customer bill list
+- Customer bill status tracking
+- Basic mobile app notifications
+- Basic sales and expense reports
+- Basic subscription control
