@@ -2,19 +2,11 @@
 
 namespace App\Providers\Filament;
 
-use App\Filament\Resources\BillItems\BillItemResource;
-use App\Filament\Resources\Bills\BillResource;
 use App\Filament\Resources\Branches\BranchResource;
 use App\Filament\Resources\Companies\CompanyResource;
 use App\Filament\Resources\Customers\CustomerResource;
-use App\Filament\Resources\ExpenseCategories\ExpenseCategoryResource;
-use App\Filament\Resources\Expenses\ExpenseResource;
-use App\Filament\Resources\ProductCategories\ProductCategoryResource;
-use App\Filament\Resources\Products\ProductResource;
 use App\Filament\Resources\Users\UserResource;
-use App\Filament\Widgets\ExpensesByMonthChart;
 use App\Filament\Widgets\FastigoStatsOverview;
-use App\Filament\Widgets\SalesByMonthChart;
 use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\AuthenticateSession;
 use Filament\Http\Middleware\DisableBladeIconComponents;
@@ -45,15 +37,9 @@ class AdminPanelProvider extends PanelProvider
                 'primary' => Color::Amber,
             ])
             ->resources([
-                BillItemResource::class,
-                BillResource::class,
                 BranchResource::class,
                 CompanyResource::class,
                 CustomerResource::class,
-                ExpenseCategoryResource::class,
-                ExpenseResource::class,
-                ProductCategoryResource::class,
-                ProductResource::class,
                 UserResource::class,
             ])
             ->pages([
@@ -61,10 +47,8 @@ class AdminPanelProvider extends PanelProvider
             ])
             ->widgets([
                 AccountWidget::class,
-                ExpensesByMonthChart::class,
                 FastigoStatsOverview::class,
                 FilamentInfoWidget::class,
-                SalesByMonthChart::class,
             ])
             ->middleware([
                 EncryptCookies::class,

@@ -12,8 +12,7 @@
 - Active Companies
 - Expired Subscriptions
 - Total Branches
-- Total Bills
-- Revenue Statistics
+- Subscription Revenue Statistics
 
 ### Companies
 - Companies List
@@ -52,6 +51,16 @@
 - General Settings
 - WhatsApp Settings
 - Notification Settings
+
+### Not Managed In Admin
+- Bills
+- Bill Items
+- Services & Products
+- Product or Item Categories
+- Expenses
+- Expense Categories
+
+These daily business records are managed in `/mobile/fastigo_business`.
 
 ---
 

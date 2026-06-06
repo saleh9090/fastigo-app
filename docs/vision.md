@@ -37,6 +37,8 @@ The admin can manage:
 * Application settings
 * General reports
 
+The admin panel is not used to create or manage operational shop records. Bills, bill items, items/products, item categories, expenses, and expense categories are managed from the `fastigo_business` mobile app according to the company user's access level.
+
 The system should support SaaS structure, where each shop or company has its own account and its own separated data.
 
 ## 2. fastigo Mobile Application

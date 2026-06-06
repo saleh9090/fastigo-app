@@ -38,6 +38,9 @@ Fastigo is a SaaS platform with:
 - Items support:
   - Service
   - Product
+- The `/admin` Filament panel is for platform-owner management only.
+- Do not add Filament admin resources for bills, bill items, items/products, item categories, expenses, or expense categories.
+- Bills, bill items, items/products, item categories, expenses, and expense categories are managed through `fastigo_business` and the related Laravel API endpoints.
 
 ## Current Build Order
 

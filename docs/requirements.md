@@ -21,9 +21,13 @@ The Platform Admin can:
 - Manage application settings
 - Suspend or activate companies
 
+The Platform Admin does not create or manage daily business records such as bills, bill items, items/products, item categories, expenses, or expense categories. Those records are managed by Company Managers and Branch Employees in the `fastigo_business` mobile app.
+
 ## 3. Business App Requirements (fastigo_business)
 
 The `/mobile/fastigo_business` Flutter app is used by Company Managers and Branch Employees depending on each user's access level.
+
+All daily shop operations are handled in `fastigo_business`, including bills, bill items, items/products, item categories, expenses, and expense categories.
 
 ### Company Manager Requirements
 

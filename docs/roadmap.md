@@ -47,16 +47,17 @@
 - Subscription Packages
 - System Settings
 
+The platform admin panel must not include management screens for bills, bill items, services/products, product or item categories, expenses, or expense categories. Those modules belong to `fastigo_business`.
+
 ---
 
 ## Phase 3 — Company Management
 ### Features
 - Manage Branches
 - Manage Employees
-- Manage Services
-- Manage Products
-- Manage Expense Categories
 - View Company Reports
+
+Company operational management is exposed through the Laravel API and the `fastigo_business` mobile app, not through Filament admin resources.
 
 ---
 
