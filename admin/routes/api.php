@@ -17,10 +17,13 @@ Route::prefix('customer')->name('customer.')->group(function () {
 
     Route::middleware('auth:sanctum')->group(function () {
         Route::get('profile', [CustomerAuthController::class, 'profile'])->name('profile');
+        Route::put('profile', [CustomerAuthController::class, 'updateProfile'])->name('profile.update');
+        Route::post('logout', [CustomerAuthController::class, 'logout'])->name('logout');
         Route::get('bills', [CustomerBillController::class, 'index'])->name('bills.index');
         Route::get('bills/{bill}', [CustomerBillController::class, 'show'])->name('bills.show');
         Route::get('notifications', [CustomerNotificationController::class, 'index'])->name('notifications.index');
         Route::post('notifications/{notification}/read', [CustomerNotificationController::class, 'markAsRead'])->name('notifications.read');
+        Route::put('notifications/{notification}/read', [CustomerNotificationController::class, 'markAsRead'])->name('notifications.read.put');
     });
 });
 
@@ -29,6 +32,7 @@ Route::prefix('shop')->name('shop.')->group(function () {
 
     Route::middleware('auth:sanctum')->group(function () {
         Route::get('profile', [ShopAuthController::class, 'profile'])->name('profile');
+        Route::post('logout', [ShopAuthController::class, 'logout'])->name('logout');
         Route::get('subscription', [ShopAuthController::class, 'subscription'])->name('subscription');
         Route::get('dashboard', [ShopDashboardController::class, 'index'])->name('dashboard');
         Route::get('bills', [ShopBillController::class, 'index'])->name('bills.index');

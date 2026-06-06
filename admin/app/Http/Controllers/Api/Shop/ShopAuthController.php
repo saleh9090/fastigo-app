@@ -71,6 +71,15 @@ class ShopAuthController extends Controller
         ]);
     }
 
+    public function logout(Request $request)
+    {
+        $request->user()?->currentAccessToken()?->delete();
+
+        return response()->json([
+            'message' => 'Logged out.',
+        ]);
+    }
+
     public function subscription(Request $request)
     {
         $user = $request->user();

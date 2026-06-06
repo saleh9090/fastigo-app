@@ -26,6 +26,8 @@ POST /api/customer/logout
 GET /api/customer/profile
 PUT /api/customer/profile
 
+Customer logout revokes the current Sanctum token. Customer profile update allows editable profile fields such as name and email.
+
 ### Bills
 
 GET /api/customer/bills
@@ -48,6 +50,8 @@ POST /api/shop/logout
 ### Profile
 
 GET /api/shop/profile
+
+Shop logout revokes the current Sanctum token for the business app session.
 
 ### Dashboard
 

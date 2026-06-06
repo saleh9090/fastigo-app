@@ -111,6 +111,37 @@ class CustomerAuthController extends Controller
         ]);
     }
 
+    public function updateProfile(Request $request)
+    {
+        $customer = $request->user();
+
+        if (! $customer instanceof Customer) {
+            return response()->json([
+                'message' => 'Authenticated user is not a customer.',
+            ], 403);
+        }
+
+        $validated = $request->validate([
+            'name' => ['nullable', 'string', 'max:255'],
+            'email' => ['nullable', 'email', 'max:255'],
+        ]);
+
+        $customer->update($validated);
+
+        return response()->json([
+            'customer' => $customer,
+        ]);
+    }
+
+    public function logout(Request $request)
+    {
+        $request->user()?->currentAccessToken()?->delete();
+
+        return response()->json([
+            'message' => 'Logged out.',
+        ]);
+    }
+
     private function normalizeCountryCode(string $countryCode): string
     {
         $countryCode = preg_replace('/\D+/', '', $countryCode);
