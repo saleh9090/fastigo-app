@@ -166,6 +166,10 @@ GET /api/admin/packages
 POST /api/admin/packages
 PUT /api/admin/packages/{id}
 
+### Subscription Control
+
+The shop API must block bill creation when the authenticated user's company is suspended or its subscription has expired.
+
 ---
 
 ## Future APIs

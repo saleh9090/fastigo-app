@@ -43,7 +43,7 @@ Stores Fastigo subscription plans.
 | monthly_price | decimal(10,3) |
 | yearly_price | decimal(10,3) |
 | max_branches | integer |
-| max_users | integer |
+| max_employees | integer |
 | features | json nullable |
 | status | active / inactive |
 | created_at | timestamp |

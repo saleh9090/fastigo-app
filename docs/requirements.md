@@ -222,6 +222,8 @@ Each subscription package should include:
 - Maximum employees
 - Active or inactive status
 
+Subscription package management belongs to the Platform Admin in `/admin`. Companies may be assigned to one package, and an inactive company or expired subscription must be blocked from creating new bills through the business API.
+
 ## 15. Reports Requirements
 
 The business application should show:

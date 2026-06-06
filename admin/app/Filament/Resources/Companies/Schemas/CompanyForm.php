@@ -27,6 +27,11 @@ class CompanyForm
                     ->email(),
                 Textarea::make('address')
                     ->columnSpanFull(),
+                Select::make('subscription_package_id')
+                    ->relationship('subscriptionPackage', 'name')
+                    ->searchable()
+                    ->preload()
+                    ->nullable(),
                 DatePicker::make('subscription_start'),
                 DatePicker::make('subscription_end'),
                 Select::make('status')

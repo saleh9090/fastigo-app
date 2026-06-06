@@ -5,6 +5,7 @@ namespace App\Providers\Filament;
 use App\Filament\Resources\Branches\BranchResource;
 use App\Filament\Resources\Companies\CompanyResource;
 use App\Filament\Resources\Customers\CustomerResource;
+use App\Filament\Resources\SubscriptionPackages\SubscriptionPackageResource;
 use App\Filament\Resources\Users\UserResource;
 use App\Filament\Widgets\FastigoStatsOverview;
 use Filament\Http\Middleware\Authenticate;
@@ -40,6 +41,7 @@ class AdminPanelProvider extends PanelProvider
                 BranchResource::class,
                 CompanyResource::class,
                 CustomerResource::class,
+                SubscriptionPackageResource::class,
                 UserResource::class,
             ])
             ->pages([

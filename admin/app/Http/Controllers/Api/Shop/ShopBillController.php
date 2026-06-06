@@ -65,6 +65,14 @@ class ShopBillController extends Controller
             return $this->shopUserForbiddenResponse();
         }
 
+        $user->loadMissing(['company.subscriptionPackage']);
+
+        if (! $user->company?->canCreateBills()) {
+            return response()->json([
+                'message' => 'Company subscription is inactive or expired.',
+            ], 403);
+        }
+
         $validated = $request->validate([
             'customer_id' => ['nullable', 'integer', 'exists:customers,id'],
             'customer_phone' => ['required', 'string', 'max:30'],

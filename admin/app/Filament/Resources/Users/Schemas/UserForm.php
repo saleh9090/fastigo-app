@@ -36,12 +36,12 @@ class UserForm
                     ->preload(),
                 Select::make('role')
                     ->options([
-                        'admin' => 'Admin',
-                        'owner' => 'Owner',
-                        'manager' => 'Manager',
-                        'employee' => 'Employee',
+                        'platform_admin' => 'Platform Admin',
+                        'company_manager' => 'Company Manager',
+                        'branch_employee' => 'Branch Employee',
+                        'public_customer' => 'Public Customer',
                     ])
-                    ->default('employee')
+                    ->default('branch_employee')
                     ->required(),
                 Toggle::make('active')
                     ->default(true),

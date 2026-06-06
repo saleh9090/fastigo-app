@@ -28,6 +28,10 @@ class CompaniesTable
                 TextColumn::make('email')
                     ->label('Email address')
                     ->searchable(),
+                TextColumn::make('subscriptionPackage.name')
+                    ->label('Package')
+                    ->searchable()
+                    ->sortable(),
                 TextColumn::make('subscription_start')
                     ->date()
                     ->sortable(),

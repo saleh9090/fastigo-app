@@ -28,6 +28,7 @@ Route::prefix('shop')->name('shop.')->group(function () {
 
     Route::middleware('auth:sanctum')->group(function () {
         Route::get('profile', [ShopAuthController::class, 'profile'])->name('profile');
+        Route::get('subscription', [ShopAuthController::class, 'subscription'])->name('subscription');
         Route::get('dashboard', [ShopDashboardController::class, 'index'])->name('dashboard');
         Route::get('bills', [ShopBillController::class, 'index'])->name('bills.index');
         Route::post('bills', [ShopBillController::class, 'store'])->name('bills.store');

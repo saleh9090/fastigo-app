@@ -57,6 +57,13 @@ Fastigo is a SaaS platform with:
 11. Subscription
 12. Reports
 
+## Subscription Implementation
+
+- Subscription packages are managed by the Platform Admin in `/admin`.
+- Companies can be assigned to one subscription package.
+- The business API must block bill creation for suspended companies or expired subscriptions.
+- Package limits include maximum branches and maximum employees.
+
 ## Important
 
 Fastigo has two mobile apps:

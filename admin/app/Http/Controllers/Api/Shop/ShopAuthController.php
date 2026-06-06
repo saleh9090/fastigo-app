@@ -22,7 +22,7 @@ class ShopAuthController extends Controller
             ], 401);
         }
 
-        $user = User::with(['company', 'branch'])
+        $user = User::with(['company.subscriptionPackage', 'branch'])
             ->where('email', $credentials['email'])
             ->first();
 
@@ -32,12 +32,19 @@ class ShopAuthController extends Controller
             ], 403);
         }
 
+        if (! in_array($user->role, ['company_manager', 'branch_employee'], true) || ! $user->company_id) {
+            return response()->json([
+                'message' => 'User account is not allowed to access the business app.',
+            ], 403);
+        }
+
         $token = $user->createToken('shop-mobile')->plainTextToken;
 
         return response()->json([
             'user' => $user,
             'company' => $user->company,
             'branch' => $user->branch,
+            'subscription' => $user->company?->subscriptionPackage,
             'token' => $token,
             'token_type' => 'Bearer',
         ]);
@@ -53,13 +60,35 @@ class ShopAuthController extends Controller
             ], 403);
         }
 
-        $user->loadMissing(['company', 'branch']);
+        $user->loadMissing(['company.subscriptionPackage', 'branch']);
 
         return response()->json([
             'user' => $user,
             'company' => $user->company,
             'branch' => $user->branch,
+            'subscription' => $user->company?->subscriptionPackage,
             'role' => $user->role,
+        ]);
+    }
+
+    public function subscription(Request $request)
+    {
+        $user = $request->user();
+
+        if (! $user instanceof User || ! $user->company_id) {
+            return response()->json([
+                'message' => 'Authenticated user is not a shop user.',
+            ], 403);
+        }
+
+        $user->loadMissing(['company.subscriptionPackage']);
+
+        return response()->json([
+            'company_status' => $user->company?->status,
+            'subscription_start' => $user->company?->subscription_start,
+            'subscription_end' => $user->company?->subscription_end,
+            'can_create_bills' => (bool) $user->company?->canCreateBills(),
+            'package' => $user->company?->subscriptionPackage,
         ]);
     }
 }
