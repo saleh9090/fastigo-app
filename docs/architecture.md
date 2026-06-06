@@ -1,34 +1,182 @@
-# Fastigo Architecture
+# Fastigo Architecture V2
 
 ## Repository Layout
 
-- `/admin` - Laravel API, Filament admin panel, database migrations, seeders, and Laravel tests.
-- `/mobile/fastigo_business` - Flutter business app for companies and shops.
-- `/mobile/fastigo` - Flutter public customer app for bill tracking, notifications, and subscriptions.
-- `/docs` - Product and engineering documentation.
+fastigo-app/
 
-## Admin and API
+├── admin/
+│   ├── app
+│   ├── database
+│   ├── routes
+│   ├── tests
+│   └── ...
+│
+├── mobile/
+│   ├── fastigo_business/
+│   └── fastigo/
+│
+├── landing/
+│   └── Fastigo Marketing Website
+│
+├── docs/
+│   ├── ROADMAP.md
+│   ├── DATABASE.md
+│   ├── ARCHITECTURE.md
+│   ├── API.md
+│   ├── SCREENS.md
+│   ├── ROLES.md
+│   └── AGENTS.md
+│
+└── README.md
 
-- Framework: Laravel
-- Admin panel: Laravel Filament
-- API authentication: Laravel Sanctum
-- Database: MySQL 8
-- Server target: Ubuntu 24 LTS, Nginx, PHP 8.4
+---
 
-The `/admin` app owns the platform admin panel and the API used by both mobile apps.
-The default Laravel database connection is MySQL, with local database name `fastigo`.
+## Backend Stack
 
-## Mobile Apps
+- PHP 8.4
+- Laravel 12
+- Filament 4
+- Laravel Sanctum
+- MySQL 8
+- Redis (Future)
+- Queue Workers
+- Firebase Cloud Messaging (FCM)
+- WhatsApp Business API
 
-- `fastigo_business`: company/shop operations app for login, dashboard, bill creation, status updates, products/services, expenses, reports, branch data, and subscriptions.
-- `fastigo`: public customer app for mobile login, OTP verification, bill tracking, notification history, and viewing subscription/customer-facing status.
+---
 
-## Notifications and OTP
+## User Roles
 
-- In-app notifications: stored by Laravel in the database.
-- Push notifications: Firebase Cloud Messaging (FCM), planned.
-- OTP: WhatsApp Business API, planned; local/dev mode may expose OTP for testing.
+### Platform Admin
+- Manage entire Fastigo platform
+- Manage subscriptions
+- Manage companies
+- Manage system settings
 
-## Future Storage
+### Company Manager
+- Manage all branches
+- Manage employees
+- View company-wide reports
 
-- Amazon S3 or DigitalOcean Spaces for uploaded files and generated invoice PDFs.
+### Branch Employee
+- Create bills
+- Update bill status
+- Manage expenses for assigned branch
+
+### Customer
+- Login with mobile number
+- Track bills
+- Receive notifications
+
+---
+
+## Mobile Applications
+
+### fastigo_business
+
+Features:
+- Login
+- Dashboard
+- Create Bills
+- Update Bill Status
+- Manage Services
+- Manage Products
+- Manage Expenses
+- Reports
+- Subscription Status
+
+### fastigo
+
+Features:
+- Login by Mobile Number
+- WhatsApp OTP
+- Bill Tracking
+- Notifications
+- Profile
+
+---
+
+## Infrastructure
+
+### Production Environment
+
+- Ubuntu 24.04 LTS
+- Nginx
+- PHP-FPM
+- MySQL 8
+- SSL
+- Supervisor
+- Queue Workers
+
+### Storage
+
+MVP:
+- Local Storage
+
+Future:
+- Amazon S3
+- DigitalOcean Spaces
+
+---
+
+## Notifications
+
+- Database Notifications
+- Firebase Push Notifications
+- WhatsApp Notifications
+
+---
+
+## Caching
+
+- Redis
+
+---
+
+## Queue System
+
+- Laravel Queue
+- Supervisor
+
+---
+
+## Monitoring
+
+Development:
+- Laravel Telescope
+
+Production:
+- Sentry
+
+---
+
+## Backup Strategy
+
+- Daily Database Backup
+- Weekly Full Backup
+
+---
+
+## CI/CD
+
+- GitHub
+- GitHub Actions
+- VPS Deployment Pipeline
+
+---
+
+## Current Development Order
+
+1. Database Design
+2. Laravel Installation
+3. Sanctum Authentication
+4. Migrations
+5. Models
+6. Relationships
+7. Filament Resources
+8. API Development
+9. fastigo_business App
+10. fastigo Customer App
+11. Notifications
+12. Reports
+13. Landing Website
