@@ -19,9 +19,9 @@ Status: In Progress
 
 ---
 
-## Phase 1: Backend Foundation
+## Phase 1: Admin/API Foundation
 
-Goal: Build the main Laravel backend API.
+Goal: Build the main Laravel API and Filament admin panel in `/admin`.
 
 Technology:
 
@@ -52,8 +52,8 @@ Tasks:
 
 Deliverable:
 
-* Working backend API
-* Working admin panel
+* Working API from `/admin`
+* Working Filament admin panel from `/admin`
 
 ---
 
@@ -80,13 +80,13 @@ Deliverable:
 
 ---
 
-## Phase 3: Shop Mobile Application
+## Phase 3: fastigo_business Mobile Application
 
-Goal: Build the mobile app for shops.
+Goal: Build the Flutter mobile app for companies and shops in `/mobile/fastigo_business`.
 
 Tasks:
 
-* Shop login
+* Business user login
 * Dashboard
 * Create bill
 * Add customer mobile number
@@ -103,13 +103,13 @@ Tasks:
 
 Deliverable:
 
-* Shop can manage bills, expenses, and reports
+* Company/shop users can manage bills, expenses, reports, and subscription information
 
 ---
 
-## Phase 4: Customer Mobile Application
+## Phase 4: fastigo Customer Mobile Application
 
-Goal: Build the public customer app.
+Goal: Build the public Flutter customer app in `/mobile/fastigo`.
 
 Tasks:
 
@@ -120,6 +120,7 @@ Tasks:
 * View bill details
 * Receive notifications
 * View notification history
+* View customer-facing subscription or membership information
 * Profile and logout
 
 Deliverable:
@@ -239,10 +240,9 @@ Possible future features:
 
 The first MVP should include:
 
-* Laravel backend
-* Admin panel
-* Shop app
-* Customer app
+* Laravel API and Filament admin panel in `/admin`
+* `fastigo_business` company/shop app
+* `fastigo` customer/public app
 * Company management
 * Branch management
 * Bill creation
@@ -256,10 +256,10 @@ The first MVP should include:
 
 ## Recommended Build Order
 
-1. Backend database and API
-2. Admin panel
-3. Shop app
-4. Customer app
+1. Admin database and API
+2. Filament admin panel
+3. `fastigo_business` app
+4. `fastigo` app
 5. Notifications
 6. Reports and charts
 7. Website

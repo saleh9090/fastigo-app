@@ -32,7 +32,11 @@ The Platform Admin can:
 
 ---
 
-## 3. Shop Owner Requirements
+## 3. Business App Requirements (`fastigo_business`)
+
+The `/mobile/fastigo_business` Flutter app is used by Shop Owners, Managers, and Employees.
+
+### Shop Owner Requirements
 
 The Shop Owner can:
 
@@ -53,6 +57,7 @@ The Shop Owner can:
 * View expense reports
 * View net profit
 * View charts
+* View subscription information
 
 ---
 
@@ -72,7 +77,9 @@ The Shop Employee can:
 
 ---
 
-## 5. Public Customer Requirements
+## 5. Public Customer App Requirements (`fastigo`)
+
+The `/mobile/fastigo` Flutter app is used by public customers.
 
 The Public Customer can:
 
@@ -85,6 +92,7 @@ The Public Customer can:
 * Receive notification when bill status changes
 * View shop name for each bill
 * View bill date and amount
+* View customer-facing subscription or membership information when enabled
 
 ---
 

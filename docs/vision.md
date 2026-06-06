@@ -18,16 +18,16 @@ The main idea is to connect shops with their customers through the customer’s 
 
 Fastigo will consist of:
 
-1. Admin Panel for Fastigo platform owner
-2. Public Mobile Application for customers
-3. Shop Mobile Application for businesses
+1. Admin/API application for Fastigo platform owner in `/admin`
+2. `fastigo` mobile application for public customers
+3. `fastigo_business` mobile application for companies and shops
 4. Website for public information and marketing
 
-## 1. Admin Panel
+## 1. Admin/API Application
 
-The admin panel will be built using Laravel.
+The admin/API application will be built using Laravel and Filament in `/admin`.
 
-This panel is used by the Fastigo platform owner to manage the SaaS system.
+This application is used by the Fastigo platform owner to manage the SaaS system and provide API endpoints for both Flutter mobile apps.
 
 The admin can manage:
 
@@ -47,15 +47,15 @@ The admin can manage:
 
 The system should support SaaS structure, where each shop or company has its own account and its own separated data.
 
-## 2. Public Mobile Application
+## 2. fastigo Mobile Application
 
-This application is for public customers.
+This Flutter application lives in `/mobile/fastigo` and is for public customers.
 
 Customers can log in using their mobile number. The login confirmation will be done using OTP through WhatsApp.
 
 The customer mobile number will be the main connection between the customer and all bills created by shops.
 
-### Public App Features
+### fastigo App Features
 
 * Login by mobile number
 * OTP verification through WhatsApp
@@ -63,6 +63,8 @@ The customer mobile number will be the main connection between the customer and 
 * Receive notification when the bill status changes
 * View all bills connected to the customer mobile number
 * View the status of each bill
+* View bill details and payment status
+* View customer-facing subscription or membership information when available
 
 ### Bill Statuses
 
@@ -92,13 +94,13 @@ When the order is completed, the final status becomes:
 
 * Delivered
 
-## 3. Shop Mobile Application
+## 3. fastigo_business Mobile Application
 
-This application is for shops and businesses subscribed to Fastigo.
+This Flutter application lives in `/mobile/fastigo_business` and is for companies and shops subscribed to Fastigo.
 
-The shop can use this application to manage daily operations.
+The company or shop can use this application to manage daily operations.
 
-### Shop App Features
+### fastigo_business App Features
 
 * Create bills
 * Add customer mobile number to each bill
@@ -112,6 +114,7 @@ The shop can use this application to manage daily operations.
 * View expense reports
 * View net profit
 * View charts for sales and expenses
+* View company subscription information
 
 ## 4. Branch Management
 
@@ -146,7 +149,7 @@ Website content should be manageable from the admin panel.
 The goal of the first version is to build a simple working platform with:
 
 * Admin panel for managing shops and subscriptions
-* Public customer app with mobile login and bill tracking
-* Shop app for creating bills and updating statuses
+* `fastigo` app with mobile login and bill tracking
+* `fastigo_business` app for creating bills and updating statuses
 * Basic notifications
 * Basic sales and expense reports

@@ -2,15 +2,15 @@
 
 ## Project
 Fastigo is a SaaS platform with:
-- Laravel backend and Filament admin panel
-- Flutter customer mobile app
-- Flutter shop mobile app
+- Laravel API and Filament admin panel in `/admin`
+- Flutter customer/public mobile app in `/mobile/fastigo`
+- Flutter business mobile app in `/mobile/fastigo_business`
 - MySQL database
 
 ## Rules
 - Do not change project structure without asking.
 - Follow the documentation inside /docs.
-- Start backend work before mobile work.
+- Start admin/API work before mobile work.
 - Use Laravel conventions.
 - Use Filament for admin panel.
 - Use clear migrations, models, relationships, and resources.
@@ -31,7 +31,9 @@ Fastigo is a SaaS platform with:
 
 ## Important
 Fastigo has two mobile apps:
-- Customer app
-- Shop app
+- `fastigo` for customers and public users.
+- `fastigo_business` for companies, shops, owners, managers, and employees.
 
-Admin panel is only for the platform owner.
+Admin panel is only for the Fastigo platform owner and lives in `/admin`.
+
+Every scenario or structure change must be saved in `/docs` before pushing.

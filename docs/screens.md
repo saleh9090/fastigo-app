@@ -1,6 +1,6 @@
 # Fastigo Screens
 
-## Admin Panel (Laravel)
+## Admin/API App (Laravel in `/admin`)
 
 ### Dashboard
 
@@ -51,7 +51,7 @@
 
 ---
 
-## Customer Mobile App
+## fastigo Customer/Public Mobile App (`/mobile/fastigo`)
 
 ### Splash Screen
 
@@ -70,6 +70,11 @@
 * All Bills
 * Bill Details
 
+### Subscriptions
+
+* Customer-facing subscription or membership details
+* Linked active services, if enabled by a company
+
 ### Notifications
 
 * Notifications List
@@ -81,7 +86,7 @@
 
 ---
 
-## Shop Mobile App
+## fastigo_business Company Mobile App (`/mobile/fastigo_business`)
 
 ### Splash Screen
 
