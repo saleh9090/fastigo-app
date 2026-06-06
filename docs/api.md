@@ -63,6 +63,8 @@ POST /api/shop/bills
 PUT /api/shop/bills/{id}
 DELETE /api/shop/bills/{id}
 
+Bill create and update requests may include an `items` array. Each item can reference an existing `product_id` or provide `item_name`, `item_type`, `unit_price`, and `quantity`. The API stores bill item name/type/price snapshots, recalculates totals, and sends the new-bill notification when the bill is created.
+
 ### Bill Status
 
 POST /api/shop/bills/{id}/status

@@ -35,6 +35,7 @@ Route::prefix('shop')->name('shop.')->group(function () {
         Route::post('bills', [ShopBillController::class, 'store'])->name('bills.store');
         Route::get('bills/{bill}', [ShopBillController::class, 'show'])->name('bills.show');
         Route::put('bills/{bill}', [ShopBillController::class, 'update'])->name('bills.update');
+        Route::delete('bills/{bill}', [ShopBillController::class, 'destroy'])->name('bills.destroy');
         Route::post('bills/{bill}/status', [ShopBillController::class, 'updateStatus'])->name('bills.status');
         Route::get('items', [ShopProductController::class, 'index'])->name('items.index');
         Route::post('items', [ShopProductController::class, 'store'])->name('items.store');

@@ -16,6 +16,7 @@ class Bill extends Model
         'paid_amount',
         'remaining_amount',
         'payment_status',
+        'payment_method',
         'status',
         'created_by',
     ];

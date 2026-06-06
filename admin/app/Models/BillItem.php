@@ -9,6 +9,8 @@ class BillItem extends Model
     protected $fillable = [
         'bill_id',
         'product_id',
+        'item_name',
+        'item_type',
         'description',
         'quantity',
         'unit_price',

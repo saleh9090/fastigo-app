@@ -4,10 +4,13 @@ namespace App\Http\Controllers\Api\Shop;
 
 use App\Http\Controllers\Controller;
 use App\Models\Bill;
+use App\Models\BillItem;
 use App\Models\Customer;
 use App\Models\Notification;
+use App\Models\Product;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\Rule;
 use Illuminate\Validation\ValidationException;
 
@@ -47,11 +50,6 @@ class ShopBillController extends Controller
         }
 
         $bill->load(['company', 'branch', 'customer', 'billItems.product']);
-        $this->createBillNotification(
-            $bill,
-            'New bill created',
-            'A new bill has been created by ' . ($bill->company?->name ?? 'the shop'),
-        );
 
         return response()->json([
             'bill' => $this->formatBillDetail($bill),
@@ -86,8 +84,21 @@ class ShopBillController extends Controller
                 'integer',
                 Rule::exists('branches', 'id')->where('company_id', $user->company_id),
             ],
+            'paid_amount' => ['nullable', 'numeric', 'min:0'],
             'payment_status' => ['nullable', Rule::in(['unpaid', 'partial', 'paid'])],
+            'payment_method' => ['nullable', Rule::in(['cash', 'card', 'bank_transfer', 'mixed'])],
             'status' => ['nullable', Rule::in(['in_process', 'ready', 'delivered'])],
+            'items' => ['nullable', 'array'],
+            'items.*.product_id' => [
+                'nullable',
+                'integer',
+                Rule::exists('products', 'id')->where('company_id', $user->company_id),
+            ],
+            'items.*.item_name' => ['nullable', 'string', 'max:255'],
+            'items.*.item_type' => ['nullable', Rule::in(['service', 'product'])],
+            'items.*.description' => ['nullable', 'string', 'max:255'],
+            'items.*.quantity' => ['required_with:items', 'numeric', 'min:0.001'],
+            'items.*.unit_price' => ['nullable', 'numeric', 'min:0'],
         ]);
 
         if ($this->isBranchEmployee($user)) {
@@ -103,18 +114,35 @@ class ShopBillController extends Controller
         $customer = $this->resolveCustomer($validated);
         $customerPhone = $this->normalizeCustomerPhoneForBill($validated['customer_phone']);
 
-        $bill = Bill::create([
-            'company_id' => $user->company_id,
-            'branch_id' => $validated['branch_id'] ?? null,
-            'customer_id' => $customer->id,
-            'bill_number' => $this->generateBillNumber(),
-            'customer_phone' => $customerPhone,
-            'payment_status' => $validated['payment_status'] ?? 'unpaid',
-            'status' => $validated['status'] ?? 'in_process',
-            'created_by' => $user->id,
-        ]);
+        $bill = DB::transaction(function () use ($customer, $customerPhone, $user, $validated): Bill {
+            $bill = Bill::create([
+                'company_id' => $user->company_id,
+                'branch_id' => $validated['branch_id'] ?? null,
+                'customer_id' => $customer->id,
+                'bill_number' => $this->generateBillNumber(),
+                'customer_phone' => $customerPhone,
+                'paid_amount' => $validated['paid_amount'] ?? 0,
+                'payment_status' => $validated['payment_status'] ?? 'unpaid',
+                'payment_method' => $validated['payment_method'] ?? 'cash',
+                'status' => $validated['status'] ?? 'in_process',
+                'created_by' => $user->id,
+            ]);
+
+            if (array_key_exists('items', $validated)) {
+                $this->replaceBillItems($bill, $validated['items'] ?? [], $user);
+            }
+
+            $this->syncBillAmounts($bill, $validated['payment_status'] ?? null);
+
+            return $bill;
+        });
 
         $bill->load(['company', 'branch', 'customer', 'billItems.product']);
+        $this->createBillNotification(
+            $bill,
+            'New bill created',
+            'A new bill has been created by ' . ($bill->company?->name ?? 'the shop'),
+        );
 
         return response()->json([
             'bill' => $this->formatBillDetail($bill),
@@ -134,18 +162,64 @@ class ShopBillController extends Controller
         }
 
         $validated = $request->validate([
+            'paid_amount' => ['nullable', 'numeric', 'min:0'],
             'payment_status' => ['required', Rule::in(['unpaid', 'partial', 'paid'])],
+            'payment_method' => ['nullable', Rule::in(['cash', 'card', 'bank_transfer', 'mixed'])],
             'status' => ['required', Rule::in(['in_process', 'ready', 'delivered'])],
+            'items' => ['nullable', 'array'],
+            'items.*.product_id' => [
+                'nullable',
+                'integer',
+                Rule::exists('products', 'id')->where('company_id', $user->company_id),
+            ],
+            'items.*.item_name' => ['nullable', 'string', 'max:255'],
+            'items.*.item_type' => ['nullable', Rule::in(['service', 'product'])],
+            'items.*.description' => ['nullable', 'string', 'max:255'],
+            'items.*.quantity' => ['required_with:items', 'numeric', 'min:0.001'],
+            'items.*.unit_price' => ['nullable', 'numeric', 'min:0'],
         ]);
 
         $oldStatus = $bill->status;
 
-        $bill->update($validated);
+        DB::transaction(function () use ($bill, $user, $validated): void {
+            $bill->update([
+                'paid_amount' => $validated['paid_amount'] ?? $bill->paid_amount,
+                'payment_status' => $validated['payment_status'],
+                'payment_method' => $validated['payment_method'] ?? $bill->payment_method,
+                'status' => $validated['status'],
+            ]);
+
+            if (array_key_exists('items', $validated)) {
+                $this->replaceBillItems($bill, $validated['items'] ?? [], $user);
+            }
+
+            $this->syncBillAmounts($bill, $validated['payment_status']);
+        });
+
         $bill->load(['company', 'branch', 'customer', 'billItems.product']);
         $this->createStatusNotificationIfNeeded($bill, $oldStatus);
 
         return response()->json([
             'bill' => $this->formatBillDetail($bill),
+        ]);
+    }
+
+    public function destroy(Request $request, Bill $bill)
+    {
+        $user = $this->shopUser($request);
+
+        if (! $user) {
+            return $this->shopUserForbiddenResponse();
+        }
+
+        if (! $this->userCanAccessBill($bill, $user)) {
+            return $this->billForbiddenResponse();
+        }
+
+        $bill->delete();
+
+        return response()->json([
+            'message' => 'Bill deleted.',
         ]);
     }
 
@@ -275,6 +349,74 @@ class ShopBillController extends Controller
         return $countryCode . $phone;
     }
 
+    private function replaceBillItems(Bill $bill, array $items, User $user): void
+    {
+        $bill->billItems()->delete();
+
+        foreach ($items as $item) {
+            $this->createBillItem($bill, $item, $user);
+        }
+    }
+
+    private function createBillItem(Bill $bill, array $item, User $user): BillItem
+    {
+        $product = null;
+
+        if (! empty($item['product_id'])) {
+            $product = Product::query()
+                ->where('company_id', $user->company_id)
+                ->findOrFail($item['product_id']);
+        }
+
+        $itemName = $item['item_name'] ?? $product?->name;
+
+        if (! $itemName) {
+            throw ValidationException::withMessages([
+                'items' => 'Each bill item must include item_name when product_id is not provided.',
+            ]);
+        }
+
+        $quantity = round((float) $item['quantity'], 3);
+        $unitPrice = round((float) ($item['unit_price'] ?? $product?->price ?? 0), 3);
+
+        return $bill->billItems()->create([
+            'product_id' => $product?->id,
+            'item_name' => $itemName,
+            'item_type' => $item['item_type'] ?? $product?->type ?? 'service',
+            'description' => $item['description'] ?? null,
+            'quantity' => $quantity,
+            'unit_price' => $unitPrice,
+            'total' => round($quantity * $unitPrice, 3),
+        ]);
+    }
+
+    private function syncBillAmounts(Bill $bill, ?string $requestedPaymentStatus = null): void
+    {
+        $totalAmount = round((float) $bill->billItems()->sum('total'), 3);
+        $paidAmount = min(round((float) $bill->paid_amount, 3), $totalAmount);
+        $remainingAmount = round(max($totalAmount - $paidAmount, 0), 3);
+
+        $bill->forceFill([
+            'total_amount' => $totalAmount,
+            'paid_amount' => $paidAmount,
+            'remaining_amount' => $remainingAmount,
+            'payment_status' => $requestedPaymentStatus ?? $this->paymentStatusForAmounts($paidAmount, $totalAmount),
+        ])->save();
+    }
+
+    private function paymentStatusForAmounts(float $paidAmount, float $totalAmount): string
+    {
+        if ($totalAmount <= 0 || $paidAmount <= 0) {
+            return 'unpaid';
+        }
+
+        if ($paidAmount >= $totalAmount) {
+            return 'paid';
+        }
+
+        return 'partial';
+    }
+
     private function generateBillNumber(): string
     {
         do {
@@ -293,6 +435,7 @@ class ShopBillController extends Controller
             'customer_phone' => $bill->customer_phone,
             'total_amount' => $bill->total_amount,
             'payment_status' => $bill->payment_status,
+            'payment_method' => $bill->payment_method,
             'status' => $bill->status,
             'created_at' => $bill->created_at,
         ];
@@ -314,6 +457,7 @@ class ShopBillController extends Controller
             'paid_amount' => $bill->paid_amount,
             'remaining_amount' => $bill->remaining_amount,
             'payment_status' => $bill->payment_status,
+            'payment_method' => $bill->payment_method,
             'status' => $bill->status,
             'created_by' => $bill->created_by,
             'created_at' => $bill->created_at,
@@ -323,6 +467,8 @@ class ShopBillController extends Controller
                     'id' => $billItem->id,
                     'product_id' => $billItem->product_id,
                     'product' => $billItem->product,
+                    'item_name' => $billItem->item_name,
+                    'item_type' => $billItem->item_type,
                     'description' => $billItem->description,
                     'quantity' => $billItem->quantity,
                     'unit_price' => $billItem->unit_price,
