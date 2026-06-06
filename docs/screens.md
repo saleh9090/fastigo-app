@@ -1,169 +1,148 @@
-# Fastigo Screens
+# Fastigo Screens V2
 
-## Admin/API App (Laravel in `/admin`)
+## Admin Panel (/admin)
+
+### Authentication
+- Login
+- Forgot Password
+- Reset Password
 
 ### Dashboard
-
-* Total Companies
-* Active Companies
-* Expired Subscriptions
-* Total Branches
-* Total Bills
-* Revenue Statistics
+- Total Companies
+- Active Companies
+- Expired Subscriptions
+- Total Branches
+- Total Bills
+- Revenue Statistics
 
 ### Companies
-
-* Companies List
-* Add Company
-* Edit Company
-* View Company Details
+- Companies List
+- Add Company
+- Edit Company
+- Company Details
+- Subscription Management
 
 ### Branches
-
-* Branches List
-* Add Branch
-* Edit Branch
+- Branches List
+- Add Branch
+- Edit Branch
 
 ### Users
-
-* Users List
-* Add User
-* Edit User
+- Users List
+- Add User
+- Edit User
+- Assign Roles
 
 ### Subscription Packages
+- Packages List
+- Add Package
+- Edit Package
 
-* Packages List
-* Add Package
-* Edit Package
+### Notifications
+- Notifications List
+- Send Notification
 
 ### Website CMS
-
-* Homepage Content
-* Features Section
-* Pricing Section
-* Contact Information
+- Homepage
+- Features
+- Pricing
+- Contact
 
 ### Settings
-
-* General Settings
-* WhatsApp Settings
-* Notification Settings
+- General Settings
+- WhatsApp Settings
+- Notification Settings
 
 ---
 
-## fastigo Customer/Public Mobile App (`/mobile/fastigo`)
+## Fastigo Customer App (/mobile/fastigo)
 
 ### Splash Screen
 
 ### Login
-
-* Mobile Number
-* WhatsApp OTP Verification
+- Mobile Number
+- WhatsApp OTP
 
 ### Home
-
-* Latest Bills
-* Recent Notifications
+- Latest Bills
+- Recent Notifications
 
 ### Bills
-
-* All Bills
-* Bill Details
-
-### Subscriptions
-
-* Customer-facing subscription or membership details
-* Linked active services, if enabled by a company
+- Bills List
+- Bill Details
+- Bill Status Timeline
 
 ### Notifications
-
-* Notifications List
+- Notifications List
 
 ### Profile
-
-* Mobile Number
-* Logout
+- Customer Information
+- Logout
 
 ---
 
-## fastigo_business Company Mobile App (`/mobile/fastigo_business`)
+## Fastigo Business App (/mobile/fastigo_business)
 
 ### Splash Screen
 
 ### Login
 
 ### Dashboard
-
-* Today's Sales
-* Today's Expenses
-* Net Profit
-* Bills Statistics
+- Today's Sales
+- Today's Expenses
+- Net Profit
+- Bill Statistics
 
 ### Bills
+- Bills List
+- Create Bill
+- Edit Bill
+- Bill Details
+- Change Status
 
-* Bills List
-* Create Bill
-* Edit Bill
-* Bill Details
+### Customers
+- Customer Search
+- Customer History
 
-### Bill Items
-
-* Add Item
-* Edit Item
-
-### Categories
-
-* Categories List
-* Add Category
+### Services & Products
+- Categories
+- Items
+- Pricing
 
 ### Expenses
-
-* Expenses List
-* Add Expense
-* Edit Expense
+- Expenses List
+- Add Expense
+- Edit Expense
 
 ### Expense Categories
-
-* Categories List
-* Add Category
+- Categories List
+- Add Category
 
 ### Reports
-
-* Sales Report
-* Expense Report
-* Net Profit Report
-* Branch Sales Report
-* Branch Expense Report
-* Combined Company Report
-
-### Branch Access
-
-* Branches List
-* Staff Branch Permissions
-* User Level Permissions
+- Sales Report
+- Expense Report
+- Profit Report
+- Branch Reports
+- Company Reports
 
 ### Charts
-
-* Sales Chart
-* Expenses Chart
-* Profit Chart
+- Sales Chart
+- Expense Chart
+- Profit Chart
 
 ### Branches
-
-* Branches List
-* Add Branch
-* Edit Branch
+- Branches List
+- Add Branch
+- Edit Branch
 
 ### Employees
-
-* Employees List
-* Add Employee
-* Permissions
+- Employees List
+- Add Employee
+- Permissions
 
 ### Profile
-
-* Company Information
-* Subscription Information
+- Company Information
+- Subscription Information
 
 ---
 
@@ -175,6 +154,8 @@
 
 ### Online Payments
 
-### WhatsApp Integration Dashboard
+### WhatsApp Dashboard
 
 ### Advanced Analytics
+
+### AI Insights
