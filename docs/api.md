@@ -97,6 +97,8 @@ POST /api/shop/items
 PUT /api/shop/items/{id}
 DELETE /api/shop/items/{id}
 
+The business API uses the public name `items`. Existing Laravel internals may still use `Product` model names until a later schema rename, but mobile clients should use `/api/shop/items`.
+
 ---
 
 ### Expenses
