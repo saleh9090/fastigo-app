@@ -1,0 +1,10 @@
+---
+deployment:
+  tasks:
+    - export APPPATH=/home/saleh9090/fastigo_app
+    - export DEPLOYPATH=/home/saleh9090/public_html
+    - /bin/mkdir -p $APPPATH
+    - /bin/mkdir -p $DEPLOYPATH
+    - /usr/bin/rsync -a --delete --exclude='.env' --exclude='storage/logs/*' admin/ $APPPATH/
+    - /usr/bin/rsync -a --delete admin/public/ $DEPLOYPATH/
+    - /usr/bin/perl -0pi -e "s|__DIR__.'/../vendor/autoload.php'|'$APPPATH/vendor/autoload.php'|g; s|__DIR__.'/../bootstrap/app.php'|'$APPPATH/bootstrap/app.php'|g" $DEPLOYPATH/index.php
