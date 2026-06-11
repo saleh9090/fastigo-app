@@ -14,7 +14,7 @@ return new class extends Migration
             $table->decimal('monthly_price', 10, 3)->default(0);
             $table->decimal('yearly_price', 10, 3)->default(0);
             $table->unsignedInteger('max_branches')->default(1);
-            $table->unsignedInteger('max_employees')->default(1);
+            $table->unsignedInteger('max_users')->default(1);
             $table->json('features')->nullable();
             $table->enum('status', ['active', 'inactive'])->default('active');
             $table->timestamps();

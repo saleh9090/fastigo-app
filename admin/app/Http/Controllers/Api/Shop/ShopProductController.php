@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api\Shop;
 use App\Http\Controllers\Controller;
 use App\Models\Product;
 use App\Models\ProductCategory;
+use App\Models\Unit;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
@@ -20,15 +21,19 @@ class ShopProductController extends Controller
         }
 
         $products = Product::query()
-            ->with('category')
+            ->with(['category', 'unit'])
             ->where('company_id', $user->company_id)
             ->where('active', true)
             ->orderBy('name')
             ->get()
             ->map(fn (Product $product): array => [
                 'id' => $product->id,
+                'category_id' => $product->category_id,
                 'category_name' => $product->category?->name,
+                'unit_id' => $product->unit_id,
+                'unit_name' => $product->unit?->name,
                 'name' => $product->name,
+                'type' => $product->type,
                 'description' => $product->description,
                 'price' => $product->price,
                 'active' => $product->active,
@@ -55,7 +60,7 @@ class ShopProductController extends Controller
             'company_id' => $user->company_id,
         ]);
 
-        $product->load('category');
+        $product->load(['category', 'unit']);
 
         return response()->json([
             'item' => $this->formatProduct($product),
@@ -71,7 +76,7 @@ class ShopProductController extends Controller
         }
 
         $product->update($this->validateProduct($request, $user));
-        $product->load('category');
+        $product->load(['category', 'unit']);
 
         return response()->json([
             'item' => $this->formatProduct($product),
@@ -167,12 +172,82 @@ class ShopProductController extends Controller
         ]);
     }
 
+    public function units(Request $request)
+    {
+        $user = $this->shopUser($request);
+
+        if (! $user || ! $user->company_id) {
+            return $this->forbiddenResponse();
+        }
+
+        $units = Unit::query()
+            ->where('company_id', $user->company_id)
+            ->where('active', true)
+            ->orderBy('name')
+            ->get()
+            ->map(fn (Unit $unit): array => $this->formatUnit($unit));
+
+        return response()->json([
+            'units' => $units,
+        ]);
+    }
+
+    public function storeUnit(Request $request)
+    {
+        $user = $this->shopUser($request);
+
+        if (! $this->canManageItems($user)) {
+            return $this->forbiddenResponse();
+        }
+
+        $unit = Unit::create([
+            ...$this->validateUnit($request),
+            'company_id' => $user->company_id,
+        ]);
+
+        return response()->json([
+            'unit' => $this->formatUnit($unit),
+        ], 201);
+    }
+
+    public function updateUnit(Request $request, Unit $unit)
+    {
+        $user = $this->shopUser($request);
+
+        if (! $this->canManageItems($user) || ! $this->belongsToCompany($unit, $user)) {
+            return $this->forbiddenResponse();
+        }
+
+        $unit->update($this->validateUnit($request));
+
+        return response()->json([
+            'unit' => $this->formatUnit($unit),
+        ]);
+    }
+
+    public function destroyUnit(Request $request, Unit $unit)
+    {
+        $user = $this->shopUser($request);
+
+        if (! $this->canManageItems($user) || ! $this->belongsToCompany($unit, $user)) {
+            return $this->forbiddenResponse();
+        }
+
+        $unit->delete();
+
+        return response()->json([
+            'message' => 'Unit deleted.',
+        ]);
+    }
+
     private function formatProduct(Product $product): array
     {
         return [
             'id' => $product->id,
             'category_id' => $product->category_id,
             'category_name' => $product->category?->name,
+            'unit_id' => $product->unit_id,
+            'unit_name' => $product->unit?->name,
             'name' => $product->name,
             'type' => $product->type,
             'description' => $product->description,
@@ -191,6 +266,16 @@ class ShopProductController extends Controller
         ];
     }
 
+    private function formatUnit(Unit $unit): array
+    {
+        return [
+            'id' => $unit->id,
+            'name' => $unit->name,
+            'description' => $unit->description,
+            'active' => $unit->active,
+        ];
+    }
+
     private function validateProduct(Request $request, User $user): array
     {
         return $request->validate([
@@ -198,6 +283,11 @@ class ShopProductController extends Controller
                 'nullable',
                 'integer',
                 Rule::exists('categories', 'id')->where('company_id', $user->company_id),
+            ],
+            'unit_id' => [
+                'nullable',
+                'integer',
+                Rule::exists('units', 'id')->where('company_id', $user->company_id),
             ],
             'name' => ['required', 'string', 'max:255'],
             'type' => ['required', Rule::in(['service', 'product'])],
@@ -208,6 +298,15 @@ class ShopProductController extends Controller
     }
 
     private function validateCategory(Request $request): array
+    {
+        return $request->validate([
+            'name' => ['required', 'string', 'max:255'],
+            'description' => ['nullable', 'string'],
+            'active' => ['sometimes', 'boolean'],
+        ]);
+    }
+
+    private function validateUnit(Request $request): array
     {
         return $request->validate([
             'name' => ['required', 'string', 'max:255'],
@@ -230,7 +329,7 @@ class ShopProductController extends Controller
             && $user->role === 'company_manager';
     }
 
-    private function belongsToCompany(Product|ProductCategory $record, User $user): bool
+    private function belongsToCompany(Product|ProductCategory|Unit $record, User $user): bool
     {
         return (int) $record->company_id === (int) $user->company_id;
     }

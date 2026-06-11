@@ -13,18 +13,18 @@ class CreateUser extends CreateRecord
 
     protected function mutateFormDataBeforeCreate(array $data): array
     {
-        $this->validateCompanyEmployeeLimit($data);
+        $this->validateCompanyUserLimit($data);
 
         return $data;
     }
 
-    private function validateCompanyEmployeeLimit(array $data): void
+    private function validateCompanyUserLimit(array $data): void
     {
         if (! in_array($data['role'] ?? null, ['company_manager', 'branch_employee'], true)) {
             return;
         }
 
-        $company = Company::with('subscriptionPackage')->find($data['company_id'] ?? null);
+        $company = Company::with('currentSubscription.subscriptionPackage')->find($data['company_id'] ?? null);
 
         if (! $company) {
             throw ValidationException::withMessages([
@@ -32,9 +32,9 @@ class CreateUser extends CreateRecord
             ]);
         }
 
-        if (! $company->canAddEmployee()) {
+        if (! $company->canAddUser()) {
             throw ValidationException::withMessages([
-                'data.company_id' => 'This company has reached its subscription employee limit.',
+                'data.company_id' => 'This company has reached its subscription user limit.',
             ]);
         }
     }

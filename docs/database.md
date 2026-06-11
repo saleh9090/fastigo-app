@@ -9,7 +9,7 @@ Fastigo uses **MySQL** as the default production and local development database 
 One company can have:
 
 * Multiple branches
-* Multiple employees
+* Multiple users
 * Multiple customers through bills
 * Multiple bills
 * Multiple expenses
@@ -28,7 +28,7 @@ This means:
 * Queries for company users must always be filtered by `company_id`.
 * Platform admins can view all companies.
 * Company managers can view only their company data.
-* Branch employees can view only their assigned branch data.
+* Branch users can view only their assigned branch data.
 
 ---
 
@@ -43,7 +43,7 @@ Stores Fastigo subscription plans.
 | monthly_price | decimal(10,3) |
 | yearly_price | decimal(10,3) |
 | max_branches | integer |
-| max_employees | integer |
+| max_users | integer |
 | features | json nullable |
 | status | active / inactive |
 | created_at | timestamp |
@@ -51,7 +51,7 @@ Stores Fastigo subscription plans.
 
 Relationship:
 
-* Subscription Package → Many Companies
+* Subscription Package → Many Company Subscriptions
 
 ---
 
@@ -62,15 +62,13 @@ Stores company information.
 | Field | Type |
 | --- | --- |
 | id | bigint |
-| subscription_package_id | bigint nullable |
 | name | string |
+| arabic_name | string nullable |
 | commercial_registration | string nullable |
 | contact_person | string nullable |
 | phone | string |
 | email | string nullable |
 | address | text nullable |
-| subscription_start | date nullable |
-| subscription_end | date nullable |
 | status | active / suspended |
 | created_at | timestamp |
 | updated_at | timestamp |
@@ -78,10 +76,10 @@ Stores company information.
 Notes:
 
 * `status = suspended` means the company cannot create new bills.
-* `subscription_package_id` can be nullable during trial or manual setup.
 
 Relationship:
 
+* Company → Many Company Subscriptions
 * Company → Many Branches
 * Company → Many Users
 * Company → Many Categories
@@ -91,7 +89,33 @@ Relationship:
 
 ---
 
-# 3. branches
+# 3. company_subscriptions
+
+Stores the subscription package assignment and subscription dates for a company.
+
+| Field | Type |
+| --- | --- |
+| id | bigint |
+| company_id | bigint |
+| subscription_package_id | bigint nullable |
+| subscription_start | date nullable |
+| subscription_end | date nullable |
+| created_at | timestamp |
+| updated_at | timestamp |
+
+Notes:
+
+* `subscription_package_id` can be nullable during trial or manual setup.
+* The application treats the latest company subscription row as the current subscription.
+
+Relationship:
+
+* Company → Many Company Subscriptions
+* Subscription Package → Many Company Subscriptions
+
+---
+
+# 4. branches
 
 Stores company branches.
 
@@ -100,6 +124,7 @@ Stores company branches.
 | id | bigint |
 | company_id | bigint |
 | name | string |
+| arabic_name | string nullable |
 | phone | string nullable |
 | address | text nullable |
 | status | active / inactive |
@@ -115,7 +140,7 @@ Relationship:
 
 ---
 
-# 4. users
+# 5. users
 
 Stores Fastigo platform users, company managers, and branch employees.
 
@@ -186,12 +211,14 @@ Examples:
 * Food
 * Services
 
+Managed by Company Managers in the `fastigo_business` Settings / Manage catalog section.
+
 | Field | Type |
 | --- | --- |
 | id | bigint |
 | company_id | bigint |
 | name | string |
-| status | active / inactive |
+| active | boolean |
 | created_at | timestamp |
 | updated_at | timestamp |
 
@@ -202,19 +229,50 @@ Relationship:
 
 ---
 
-# 7. items
+# 7. units
+
+Stores company item units.
+
+Examples:
+
+* Pcs
+* Meter
+* Kg
+
+Managed by Company Managers in the `fastigo_business` Settings / Manage catalog section.
+
+| Field | Type |
+| --- | --- |
+| id | bigint |
+| company_id | bigint |
+| name | string |
+| description | text nullable |
+| active | boolean |
+| created_at | timestamp |
+| updated_at | timestamp |
+
+Relationship:
+
+* Company → Many Units
+
+---
+
+# 8. items
 
 Stores company products and services.
+
+Managed by Company Managers in the `fastigo_business` Settings / Manage catalog section. Add and edit forms select an item category from company item categories and an item unit from company units.
 
 | Field | Type |
 | --- | --- |
 | id | bigint |
 | company_id | bigint |
 | category_id | bigint |
+| unit_id | bigint nullable |
 | name | string |
 | type | service / product |
 | price | decimal(10,3) |
-| status | active / inactive |
+| active | boolean |
 | created_at | timestamp |
 | updated_at | timestamp |
 
@@ -231,7 +289,7 @@ Relationship:
 
 ---
 
-# 8. bills
+# 9. bills
 
 Main bill table.
 
@@ -272,7 +330,7 @@ Relationship:
 
 ---
 
-# 9. bill_items
+# 10. bill_items
 
 Stores bill details.
 
@@ -301,7 +359,7 @@ Relationship:
 
 ---
 
-# 10. bill_status_histories
+# 11. bill_status_histories
 
 Stores every status change for a bill.
 
@@ -328,7 +386,7 @@ Relationship:
 
 ---
 
-# 11. expense_categories
+# 12. expense_categories
 
 Stores company expense categories.
 
@@ -357,7 +415,7 @@ Relationship:
 
 ---
 
-# 12. expenses
+# 13. expenses
 
 Stores company and branch expenses.
 
@@ -388,7 +446,7 @@ Relationship:
 
 ---
 
-# 13. notifications
+# 14. notifications
 
 Stores customer notifications.
 
@@ -418,7 +476,7 @@ Relationship:
 
 ---
 
-# 14. otp_verifications
+# 15. otp_verifications
 
 Stores WhatsApp OTP verification requests.
 
@@ -447,18 +505,20 @@ Important rules:
 
 1. subscription_packages
 2. companies
-3. branches
-4. users
-5. customers
-6. categories
-7. items
-8. bills
-9. bill_items
-10. bill_status_histories
-11. expense_categories
-12. expenses
-13. notifications
-14. otp_verifications
+3. company_subscriptions
+4. branches
+5. users
+6. customers
+7. categories
+8. units
+9. items
+10. bills
+11. bill_items
+12. bill_status_histories
+13. expense_categories
+14. expenses
+15. notifications
+16. otp_verifications
 
 ---
 
@@ -473,6 +533,7 @@ Important rules:
 | companies | commercial_registration nullable unique, optional |
 | bills | company_id + bill_number unique |
 | categories | company_id + name unique |
+| units | company_id + name unique |
 | expense_categories | company_id + name unique |
 
 ## Common indexes
@@ -482,6 +543,7 @@ Important rules:
 | branches | company_id |
 | users | company_id, branch_id, role, status |
 | categories | company_id |
+| units | company_id |
 | items | company_id, category_id, status |
 | bills | company_id, branch_id, customer_id, status, payment_status, created_at |
 | bill_items | bill_id, item_id |
@@ -554,5 +616,5 @@ Uses all tables.
 Main purpose:
 
 * Platform owner manages companies
-* Platform owner manages subscriptions
+* Platform owner manages company subscriptions
 * Platform owner monitors system activity

@@ -14,18 +14,18 @@ class EditUser extends EditRecord
 
     protected function mutateFormDataBeforeSave(array $data): array
     {
-        $this->validateCompanyEmployeeLimit($data);
+        $this->validateCompanyUserLimit($data);
 
         return $data;
     }
 
-    private function validateCompanyEmployeeLimit(array $data): void
+    private function validateCompanyUserLimit(array $data): void
     {
         if (! in_array($data['role'] ?? null, ['company_manager', 'branch_employee'], true)) {
             return;
         }
 
-        $company = Company::with('subscriptionPackage')->find($data['company_id'] ?? null);
+        $company = Company::with('currentSubscription.subscriptionPackage')->find($data['company_id'] ?? null);
 
         if (! $company) {
             throw ValidationException::withMessages([
@@ -33,9 +33,9 @@ class EditUser extends EditRecord
             ]);
         }
 
-        if (! $company->canAddEmployee($this->record->id)) {
+        if (! $company->canAddUser($this->record->id)) {
             throw ValidationException::withMessages([
-                'data.company_id' => 'This company has reached its subscription employee limit.',
+                'data.company_id' => 'This company has reached its subscription user limit.',
             ]);
         }
     }

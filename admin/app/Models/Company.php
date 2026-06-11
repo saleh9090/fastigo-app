@@ -7,34 +7,33 @@ use Illuminate\Database\Eloquent\Model;
 class Company extends Model
 {
     protected $fillable = [
-        'subscription_package_id',
         'name',
+        'arabic_name',
         'commercial_registration',
         'contact_person',
         'phone',
         'email',
         'address',
-        'subscription_start',
-        'subscription_end',
         'status',
     ];
-
-    protected function casts(): array
-    {
-        return [
-            'subscription_start' => 'date',
-            'subscription_end' => 'date',
-        ];
-    }
 
     public function branches()
     {
         return $this->hasMany(Branch::class);
     }
 
-    public function subscriptionPackage()
+    public function companySubscriptions()
     {
-        return $this->belongsTo(SubscriptionPackage::class);
+        return $this->hasMany(CompanySubscription::class);
+    }
+
+    public function currentSubscription()
+    {
+        return $this->hasOne(CompanySubscription::class)
+            ->ofMany([
+                'subscription_end' => 'max',
+                'id' => 'max',
+            ]);
     }
 
     public function canCreateBills(): bool
@@ -43,11 +42,13 @@ class Company extends Model
             return false;
         }
 
-        if ($this->subscription_end && $this->subscription_end->isBefore(today())) {
+        $subscription = $this->currentSubscription;
+
+        if ($subscription?->subscription_end && $subscription->subscription_end->isBefore(today())) {
             return false;
         }
 
-        if ($this->subscriptionPackage && $this->subscriptionPackage->status !== 'active') {
+        if ($subscription?->subscriptionPackage && $subscription->subscriptionPackage->status !== 'active') {
             return false;
         }
 
@@ -56,7 +57,9 @@ class Company extends Model
 
     public function canAddBranch(?int $ignoreBranchId = null): bool
     {
-        if (! $this->subscriptionPackage) {
+        $subscriptionPackage = $this->currentSubscription?->subscriptionPackage;
+
+        if (! $subscriptionPackage) {
             return true;
         }
 
@@ -64,21 +67,23 @@ class Company extends Model
             ->when($ignoreBranchId, fn ($query) => $query->whereKeyNot($ignoreBranchId))
             ->count();
 
-        return $branchCount < $this->subscriptionPackage->max_branches;
+        return $branchCount < $subscriptionPackage->max_branches;
     }
 
-    public function canAddEmployee(?int $ignoreUserId = null): bool
+    public function canAddUser(?int $ignoreUserId = null): bool
     {
-        if (! $this->subscriptionPackage) {
+        $subscriptionPackage = $this->currentSubscription?->subscriptionPackage;
+
+        if (! $subscriptionPackage) {
             return true;
         }
 
-        $employeeCount = $this->users()
+        $userCount = $this->users()
             ->whereIn('role', ['company_manager', 'branch_employee'])
             ->when($ignoreUserId, fn ($query) => $query->whereKeyNot($ignoreUserId))
             ->count();
 
-        return $employeeCount < $this->subscriptionPackage->max_employees;
+        return $userCount < $subscriptionPackage->max_users;
     }
 
     public function users()

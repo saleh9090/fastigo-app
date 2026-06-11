@@ -27,7 +27,9 @@ The Platform Admin does not create or manage daily business records such as bill
 
 The `/mobile/fastigo_business` Flutter app is used by Company Managers and Branch Employees depending on each user's access level.
 
-All daily shop operations are handled in `fastigo_business`, including bills, bill items, items/products, item categories, expenses, and expense categories.
+All daily shop operations are handled in `fastigo_business`, including bills, bill items, items/products, item categories, units, expenses, and expense categories.
+
+Items/products, item categories, and units are managed from the Settings / Manage catalog section in `fastigo_business`. The mobile app should not expose a separate Catalog bottom navigation tab. The Catalog and Users sections on the Manage page are collapsed by default and expand from their section arrows.
 
 ### Company Manager Requirements
 
@@ -37,13 +39,14 @@ The Company Manager can:
 - View dashboard
 - Manage company profile
 - Manage branches
-- Add employees
-- Manage employee permissions
+- Add users
+- Manage user permissions
 - Create bills
 - View all bills
 - Update bill status
 - Manage item categories
 - Manage items
+- Manage units
 - Manage expenses
 - Manage expense categories
 - View sales reports
@@ -219,10 +222,10 @@ Each subscription package should include:
 - Monthly price
 - Yearly price
 - Maximum branches
-- Maximum employees
+- Maximum users
 - Active or inactive status
 
-Subscription package management belongs to the Platform Admin in `/admin`. Companies may be assigned to one package, and an inactive company or expired subscription must be blocked from creating new bills through the business API.
+Subscription package management belongs to the Platform Admin in `/admin`. Company package assignment and subscription dates are stored in `company_subscriptions`; the latest row is treated as the current subscription. An inactive company or expired subscription must be blocked from creating new bills through the business API.
 
 ## 15. Reports Requirements
 
@@ -235,7 +238,7 @@ The business application should show:
 - Expenses by date
 - Sales by branch
 - Expenses by branch
-- Sales by employee
+- Sales by user
 - Bills by status
 - Top services
 - Top products

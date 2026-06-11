@@ -4,6 +4,7 @@ namespace App\Providers\Filament;
 
 use App\Filament\Resources\Branches\BranchResource;
 use App\Filament\Resources\Companies\CompanyResource;
+use App\Filament\Resources\CompanySubscriptions\CompanySubscriptionResource;
 use App\Filament\Resources\Customers\CustomerResource;
 use App\Filament\Resources\SubscriptionPackages\SubscriptionPackageResource;
 use App\Filament\Resources\Users\UserResource;
@@ -15,7 +16,6 @@ use Filament\Http\Middleware\DispatchServingFilamentEvent;
 use Filament\Pages\Dashboard;
 use Filament\Panel;
 use Filament\PanelProvider;
-use Filament\Support\Colors\Color;
 use Filament\Widgets\AccountWidget;
 use Filament\Widgets\FilamentInfoWidget;
 use Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse;
@@ -35,11 +35,37 @@ class AdminPanelProvider extends PanelProvider
             ->path('admin')
             ->login()
             ->colors([
-                'primary' => Color::Amber,
+                'primary' => [
+                    50 => '#F6F4FE',
+                    100 => '#EDE9FE',
+                    200 => '#DFDAF3',
+                    300 => '#C7BAFA',
+                    400 => '#9C84F6',
+                    500 => '#6A49F2',
+                    600 => '#593DD4',
+                    700 => '#4630A6',
+                    800 => '#32236F',
+                    900 => '#1D1445',
+                    950 => '#120C2E',
+                ],
+                'gray' => [
+                    50 => '#FFFFFF',
+                    100 => '#F6F4FE',
+                    200 => '#DFDAF3',
+                    300 => '#D4D2DD',
+                    400 => '#9995B1',
+                    500 => '#73708E',
+                    600 => '#3E3F66',
+                    700 => '#32236F',
+                    800 => '#1D1445',
+                    900 => '#120C2E',
+                    950 => '#0B071C',
+                ],
             ])
             ->resources([
                 BranchResource::class,
                 CompanyResource::class,
+                CompanySubscriptionResource::class,
                 CustomerResource::class,
                 SubscriptionPackageResource::class,
                 UserResource::class,

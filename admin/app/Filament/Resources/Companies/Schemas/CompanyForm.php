@@ -2,7 +2,6 @@
 
 namespace App\Filament\Resources\Companies\Schemas;
 
-use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Textarea;
@@ -16,6 +15,8 @@ class CompanyForm
             ->components([
                 TextInput::make('name')
                     ->required(),
+                TextInput::make('arabic_name')
+                    ->label('Company name (Arabic)'),
                 TextInput::make('commercial_registration'),
                 TextInput::make('contact_person')
                     ->required(),
@@ -27,13 +28,6 @@ class CompanyForm
                     ->email(),
                 Textarea::make('address')
                     ->columnSpanFull(),
-                Select::make('subscription_package_id')
-                    ->relationship('subscriptionPackage', 'name')
-                    ->searchable()
-                    ->preload()
-                    ->nullable(),
-                DatePicker::make('subscription_start'),
-                DatePicker::make('subscription_end'),
                 Select::make('status')
                     ->options(['active' => 'Active', 'suspended' => 'Suspended'])
                     ->default('active')

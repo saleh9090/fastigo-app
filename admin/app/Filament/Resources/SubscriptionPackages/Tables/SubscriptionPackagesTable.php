@@ -25,7 +25,8 @@ class SubscriptionPackagesTable
                     ->sortable(),
                 TextColumn::make('max_branches')
                     ->sortable(),
-                TextColumn::make('max_employees')
+                TextColumn::make('max_users')
+                    ->label('Max users')
                     ->sortable(),
                 TextColumn::make('status')
                     ->badge(),

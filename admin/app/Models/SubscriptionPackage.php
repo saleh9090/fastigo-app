@@ -11,7 +11,7 @@ class SubscriptionPackage extends Model
         'monthly_price',
         'yearly_price',
         'max_branches',
-        'max_employees',
+        'max_users',
         'features',
         'status',
     ];
@@ -25,8 +25,8 @@ class SubscriptionPackage extends Model
         ];
     }
 
-    public function companies()
+    public function companySubscriptions()
     {
-        return $this->hasMany(Company::class);
+        return $this->hasMany(CompanySubscription::class);
     }
 }

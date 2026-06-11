@@ -50,6 +50,10 @@ Route::prefix('shop')->name('shop.')->group(function () {
         Route::post('categories', [ShopProductController::class, 'storeCategory'])->name('categories.store');
         Route::put('categories/{category}', [ShopProductController::class, 'updateCategory'])->name('categories.update');
         Route::delete('categories/{category}', [ShopProductController::class, 'destroyCategory'])->name('categories.destroy');
+        Route::get('units', [ShopProductController::class, 'units'])->name('units.index');
+        Route::post('units', [ShopProductController::class, 'storeUnit'])->name('units.store');
+        Route::put('units/{unit}', [ShopProductController::class, 'updateUnit'])->name('units.update');
+        Route::delete('units/{unit}', [ShopProductController::class, 'destroyUnit'])->name('units.destroy');
         Route::get('products', [ShopProductController::class, 'index'])->name('products.index');
         Route::get('product-categories', [ShopProductController::class, 'categories'])->name('product-categories.index');
         Route::get('customers', [ShopDashboardController::class, 'customers'])->name('customers.index');
@@ -57,9 +61,14 @@ Route::prefix('shop')->name('shop.')->group(function () {
         Route::get('branches', [ShopManagementController::class, 'branches'])->name('branches.index');
         Route::post('branches', [ShopManagementController::class, 'storeBranch'])->name('branches.store');
         Route::put('branches/{branch}', [ShopManagementController::class, 'updateBranch'])->name('branches.update');
+        Route::get('users', [ShopManagementController::class, 'users'])->name('users.index');
+        Route::post('users', [ShopManagementController::class, 'storeUser'])->name('users.store');
+        Route::put('users/{user}', [ShopManagementController::class, 'updateUser'])->name('users.update');
+        Route::delete('users/{user}', [ShopManagementController::class, 'destroyUser'])->name('users.destroy');
         Route::get('employees', [ShopManagementController::class, 'employees'])->name('employees.index');
         Route::post('employees', [ShopManagementController::class, 'storeEmployee'])->name('employees.store');
-        Route::put('employees/{employee}', [ShopManagementController::class, 'updateEmployee'])->name('employees.update');
+        Route::put('employees/{user}', [ShopManagementController::class, 'updateEmployee'])->name('employees.update');
+        Route::delete('employees/{user}', [ShopManagementController::class, 'destroyUser'])->name('employees.destroy');
         Route::get('expenses', [ShopExpenseController::class, 'index'])->name('expenses.index');
         Route::post('expenses', [ShopExpenseController::class, 'store'])->name('expenses.store');
         Route::put('expenses/{expense}', [ShopExpenseController::class, 'update'])->name('expenses.update');

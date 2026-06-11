@@ -68,7 +68,7 @@ class ShopBillController extends Controller
             return $this->shopUserForbiddenResponse();
         }
 
-        $user->loadMissing(['company.subscriptionPackage']);
+        $user->loadMissing(['company.currentSubscription.subscriptionPackage']);
 
         if (! $user->company?->canCreateBills()) {
             return response()->json([

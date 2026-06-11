@@ -15,6 +15,7 @@
 ### Database
 - subscription_packages
 - companies
+- company_subscriptions
 - branches
 - users
 - customers
@@ -54,7 +55,7 @@ The platform admin panel must not include management screens for bills, bill ite
 ## Phase 3 — Company Management
 ### Features
 - Manage Branches
-- Manage Employees
+- Manage Users
 - View Company Reports
 
 Company operational management is exposed through the Laravel API and the `fastigo_business` mobile app, not through Filament admin resources.

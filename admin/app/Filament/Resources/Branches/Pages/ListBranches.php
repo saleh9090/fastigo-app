@@ -13,7 +13,10 @@ class ListBranches extends ListRecords
     protected function getHeaderActions(): array
     {
         return [
-            CreateAction::make(),
+            CreateAction::make()
+                ->url(fn (): string => BranchResource::getUrl('create', [
+                    'company_id' => request()->integer('company_id') ?: null,
+                ])),
         ];
     }
 }

@@ -41,7 +41,7 @@ class ShopManagementController extends Controller
             return $this->forbiddenResponse('Only company managers can create branches.');
         }
 
-        $company = Company::with('subscriptionPackage')->findOrFail($user->company_id);
+        $company = Company::with('currentSubscription.subscriptionPackage')->findOrFail($user->company_id);
 
         if (! $company->canAddBranch()) {
             throw ValidationException::withMessages([
@@ -74,80 +74,112 @@ class ShopManagementController extends Controller
         ]);
     }
 
+    public function users(Request $request)
+    {
+        return $this->businessUsersResponse($request);
+    }
+
     public function employees(Request $request)
+    {
+        return $this->businessUsersResponse($request);
+    }
+
+    public function businessUsersResponse(Request $request)
     {
         $user = $this->businessUser($request);
 
         if (! $this->isCompanyManager($user)) {
-            return $this->forbiddenResponse('Only company managers can access employees.');
+            return $this->forbiddenResponse('Only company managers can access users.');
         }
 
-        $employees = User::query()
+        $users = User::query()
             ->with('branch')
             ->where('company_id', $user->company_id)
             ->whereIn('role', ['company_manager', 'branch_employee'])
             ->orderBy('name')
             ->get()
-            ->map(fn (User $employee): array => $this->formatEmployee($employee));
+            ->map(fn (User $businessUser): array => $this->formatBusinessUser($businessUser));
 
         return response()->json([
-            'employees' => $employees,
+            'users' => $users,
+            'employees' => $users,
         ]);
+    }
+
+    public function storeUser(Request $request)
+    {
+        return $this->storeBusinessUser($request);
     }
 
     public function storeEmployee(Request $request)
     {
+        return $this->storeBusinessUser($request);
+    }
+
+    public function storeBusinessUser(Request $request)
+    {
         $user = $this->businessUser($request);
 
         if (! $this->isCompanyManager($user)) {
-            return $this->forbiddenResponse('Only company managers can create employees.');
+            return $this->forbiddenResponse('Only company managers can create users.');
         }
 
-        $company = Company::with('subscriptionPackage')->findOrFail($user->company_id);
+        $company = Company::with('currentSubscription.subscriptionPackage')->findOrFail($user->company_id);
 
-        if (! $company->canAddEmployee()) {
+        if (! $company->canAddUser()) {
             throw ValidationException::withMessages([
-                'email' => 'This company has reached its subscription employee limit.',
+                'email' => 'This company has reached its subscription user limit.',
             ]);
         }
 
-        $validated = $this->validateEmployee($request, $user);
+        $validated = $this->validateBusinessUser($request, $user);
 
-        $employee = User::create([
+        $businessUser = User::create([
             ...$validated,
             'company_id' => $user->company_id,
             'password' => Hash::make($validated['password']),
             'active' => $validated['active'] ?? true,
         ]);
 
-        $employee->load('branch');
+        $businessUser->load('branch');
 
         return response()->json([
-            'employee' => $this->formatEmployee($employee),
+            'user' => $this->formatBusinessUser($businessUser),
+            'employee' => $this->formatBusinessUser($businessUser),
         ], 201);
     }
 
-    public function updateEmployee(Request $request, User $employee)
+    public function updateUser(Request $request, User $user)
     {
-        $user = $this->businessUser($request);
+        return $this->updateBusinessUser($request, $user);
+    }
+
+    public function updateEmployee(Request $request, User $user)
+    {
+        return $this->updateBusinessUser($request, $user);
+    }
+
+    public function updateBusinessUser(Request $request, User $user)
+    {
+        $manager = $this->businessUser($request);
 
         if (
-            ! $this->isCompanyManager($user) ||
-            (int) $employee->company_id !== (int) $user->company_id ||
-            ! in_array($employee->role, ['company_manager', 'branch_employee'], true)
+            ! $this->isCompanyManager($manager) ||
+            (int) $user->company_id !== (int) $manager->company_id ||
+            ! in_array($user->role, ['company_manager', 'branch_employee'], true)
         ) {
-            return $this->forbiddenResponse('Only company managers can update company employees.');
+            return $this->forbiddenResponse('Only company managers can update company users.');
         }
 
-        $company = Company::with('subscriptionPackage')->findOrFail($user->company_id);
+        $company = Company::with('currentSubscription.subscriptionPackage')->findOrFail($manager->company_id);
 
-        if (! $company->canAddEmployee($employee->id)) {
+        if (! $company->canAddUser($user->id)) {
             throw ValidationException::withMessages([
-                'email' => 'This company has reached its subscription employee limit.',
+                'email' => 'This company has reached its subscription user limit.',
             ]);
         }
 
-        $validated = $this->validateEmployee($request, $user, $employee);
+        $validated = $this->validateBusinessUser($request, $manager, $user);
         $password = $validated['password'] ?? null;
         unset($validated['password']);
 
@@ -155,11 +187,37 @@ class ShopManagementController extends Controller
             $validated['password'] = Hash::make($password);
         }
 
-        $employee->update($validated);
-        $employee->load('branch');
+        $user->update($validated);
+        $user->load('branch');
 
         return response()->json([
-            'employee' => $this->formatEmployee($employee),
+            'user' => $this->formatBusinessUser($user),
+            'employee' => $this->formatBusinessUser($user),
+        ]);
+    }
+
+    public function destroyUser(Request $request, User $user)
+    {
+        $manager = $this->businessUser($request);
+
+        if (
+            ! $this->isCompanyManager($manager) ||
+            (int) $user->company_id !== (int) $manager->company_id ||
+            ! in_array($user->role, ['company_manager', 'branch_employee'], true)
+        ) {
+            return $this->forbiddenResponse('Only company managers can delete company users.');
+        }
+
+        if ((int) $manager->id === (int) $user->id) {
+            throw ValidationException::withMessages([
+                'user' => 'You cannot delete your own user account.',
+            ]);
+        }
+
+        $user->delete();
+
+        return response()->json([
+            'message' => 'User deleted.',
         ]);
     }
 
@@ -197,7 +255,7 @@ class ShopManagementController extends Controller
         ]);
     }
 
-    private function validateEmployee(Request $request, User $manager, ?User $employee = null): array
+    private function validateBusinessUser(Request $request, User $manager, ?User $user = null): array
     {
         return $request->validate([
             'name' => ['required', 'string', 'max:255'],
@@ -205,9 +263,9 @@ class ShopManagementController extends Controller
                 'required',
                 'email',
                 'max:255',
-                Rule::unique('users', 'email')->ignore($employee?->id),
+                Rule::unique('users', 'email')->ignore($user?->id),
             ],
-            'password' => [$employee ? 'nullable' : 'required', 'string', 'min:8'],
+            'password' => [$user ? 'nullable' : 'required', 'string', 'min:8'],
             'phone' => ['nullable', 'string', 'max:30'],
             'role' => ['required', Rule::in(['company_manager', 'branch_employee'])],
             'branch_id' => [
@@ -232,19 +290,19 @@ class ShopManagementController extends Controller
         ];
     }
 
-    private function formatEmployee(User $employee): array
+    private function formatBusinessUser(User $user): array
     {
         return [
-            'id' => $employee->id,
-            'name' => $employee->name,
-            'email' => $employee->email,
-            'phone' => $employee->phone,
-            'role' => $employee->role,
-            'branch_id' => $employee->branch_id,
-            'branch_name' => $employee->branch?->name,
-            'active' => $employee->active,
-            'created_at' => $employee->created_at,
-            'updated_at' => $employee->updated_at,
+            'id' => $user->id,
+            'name' => $user->name,
+            'email' => $user->email,
+            'phone' => $user->phone,
+            'role' => $user->role,
+            'branch_id' => $user->branch_id,
+            'branch_name' => $user->branch?->name,
+            'active' => $user->active,
+            'created_at' => $user->created_at,
+            'updated_at' => $user->updated_at,
         ];
     }
 

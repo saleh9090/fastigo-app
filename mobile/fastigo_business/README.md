@@ -1,6 +1,26 @@
 # fastigo_business
 
-A new Flutter project.
+Fastigo Business mobile app for company managers and branch employees.
+
+## iOS simulator from Desktop
+
+If the project is stored under `~/Desktop`, iOS simulator builds can fail with
+`resource fork, Finder information, or similar detritus not allowed`. This is a
+macOS extended-attribute issue on generated iOS framework binaries, not a
+Flutter code error.
+
+Run the app through the clean temp-copy helper:
+
+```bash
+cd /Users/saleh9090/Desktop/fastigo-app/mobile/fastigo_business
+./run_ios_simulator.sh
+```
+
+To choose a different simulator:
+
+```bash
+./run_ios_simulator.sh "iPhone 17 Pro Max"
+```
 
 ## Getting Started
 

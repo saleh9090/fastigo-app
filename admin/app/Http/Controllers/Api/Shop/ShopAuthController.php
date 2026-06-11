@@ -22,7 +22,7 @@ class ShopAuthController extends Controller
             ], 401);
         }
 
-        $user = User::with(['company.subscriptionPackage', 'branch'])
+        $user = User::with(['company.currentSubscription.subscriptionPackage', 'branch'])
             ->where('email', $credentials['email'])
             ->first();
 
@@ -44,7 +44,7 @@ class ShopAuthController extends Controller
             'user' => $user,
             'company' => $user->company,
             'branch' => $user->branch,
-            'subscription' => $user->company?->subscriptionPackage,
+            'subscription' => $user->company?->currentSubscription,
             'token' => $token,
             'token_type' => 'Bearer',
         ]);
@@ -60,13 +60,13 @@ class ShopAuthController extends Controller
             ], 403);
         }
 
-        $user->loadMissing(['company.subscriptionPackage', 'branch']);
+        $user->loadMissing(['company.currentSubscription.subscriptionPackage', 'branch']);
 
         return response()->json([
             'user' => $user,
             'company' => $user->company,
             'branch' => $user->branch,
-            'subscription' => $user->company?->subscriptionPackage,
+            'subscription' => $user->company?->currentSubscription,
             'role' => $user->role,
         ]);
     }
@@ -90,14 +90,16 @@ class ShopAuthController extends Controller
             ], 403);
         }
 
-        $user->loadMissing(['company.subscriptionPackage']);
+        $user->loadMissing(['company.currentSubscription.subscriptionPackage']);
+
+        $subscription = $user->company?->currentSubscription;
 
         return response()->json([
             'company_status' => $user->company?->status,
-            'subscription_start' => $user->company?->subscription_start,
-            'subscription_end' => $user->company?->subscription_end,
+            'subscription_start' => $subscription?->subscription_start,
+            'subscription_end' => $subscription?->subscription_end,
             'can_create_bills' => (bool) $user->company?->canCreateBills(),
-            'package' => $user->company?->subscriptionPackage,
+            'package' => $subscription?->subscriptionPackage,
         ]);
     }
 }

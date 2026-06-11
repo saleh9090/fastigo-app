@@ -49,13 +49,13 @@ fastigo-app/
 
 ### Platform Admin
 - Manage entire Fastigo platform
-- Manage subscriptions
+- Manage subscription packages and company subscriptions
 - Manage companies
 - Manage system settings
 
 ### Company Manager
 - Manage all branches
-- Manage employees
+- Manage users
 - View company-wide reports
 
 ### Branch Employee

@@ -13,7 +13,7 @@ class CreateBranch extends CreateRecord
 
     protected function mutateFormDataBeforeCreate(array $data): array
     {
-        $company = Company::with('subscriptionPackage')->find($data['company_id'] ?? null);
+        $company = Company::with('currentSubscription.subscriptionPackage')->find($data['company_id'] ?? null);
 
         if ($company && ! $company->canAddBranch()) {
             throw ValidationException::withMessages([

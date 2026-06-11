@@ -113,10 +113,22 @@ These daily business records are managed in `/mobile/fastigo_business`.
 - Customer Search
 - Customer History
 
-### Services & Products
-- Categories
-- Items
-- Pricing
+### Settings / Manage
+- Subscription Information
+- Languages
+- Catalog (collapsed by default)
+- Items List
+- Add/Edit/Delete Item
+- Item Categories List
+- Add/Edit/Delete Item Category
+- Units List
+- Add/Edit/Delete Unit
+- Users (collapsed by default)
+- Users List
+- Add/Edit/Delete User
+- Managed by fastigo.app footer link
+
+Items require a selected item category when applicable. The business app no longer exposes a separate Catalog bottom navigation tab; catalog management lives in Settings / Manage.
 
 ### Expenses
 - Expenses List
@@ -144,9 +156,11 @@ These daily business records are managed in `/mobile/fastigo_business`.
 - Add Branch
 - Edit Branch
 
-### Employees
-- Employees List
-- Add Employee
+### Users
+- Users List
+- Add User
+- Edit User
+- Delete User with confirmation
 - Permissions
 
 ### Profile

@@ -57,6 +57,14 @@ Shop logout revokes the current Sanctum token for the business app session.
 
 GET /api/shop/dashboard
 
+Optional query parameters:
+- `period`: `today` (default), `day`, `yesterday`, `this_week`, `this_month`, `this_year`, `last_month`, or `custom`
+- `date`: optional anchor date for `day`, `this_week`, `this_month`, and `this_year`, formatted as `YYYY-MM-DD`
+- `branch_id`: branch filter for Company Managers. Omit it to show all branches. Branch Employees are always scoped to their assigned branch.
+- `start_date` and `end_date`: required only when `period=custom`, formatted as `YYYY-MM-DD`.
+
+Dashboard responses include the selected `period_label`, `date_from`, `date_to`, `selected_branch_id`, summary sales/expenses/net profit, bill status counts, customer/product counts, and latest bills for the selected scope.
+
 ---
 
 ### Bills
@@ -96,6 +104,19 @@ POST /api/shop/categories
 PUT /api/shop/categories/{id}
 DELETE /api/shop/categories/{id}
 
+Company Managers use these endpoints from the `fastigo_business` Settings / Manage catalog section for item category CRUD.
+
+---
+
+### Units
+
+GET /api/shop/units
+POST /api/shop/units
+PUT /api/shop/units/{id}
+DELETE /api/shop/units/{id}
+
+Company Managers use these endpoints from the `fastigo_business` Settings / Manage catalog section for unit CRUD. Units store a name and optional description, such as Pcs or Meter.
+
 ---
 
 ### Items
@@ -106,6 +127,8 @@ PUT /api/shop/items/{id}
 DELETE /api/shop/items/{id}
 
 The business API uses the public name `items`. Existing Laravel internals may still use `Product` model names until a later schema rename, but mobile clients should use `/api/shop/items`.
+
+Company Managers use these endpoints from the `fastigo_business` Settings / Manage catalog section for item CRUD. Add and edit item forms include an item category selector backed by `/api/shop/categories` and a unit selector backed by `/api/shop/units`.
 
 ---
 
@@ -150,13 +173,14 @@ Company Managers can list and manage all branches for their company. Branch Empl
 
 ---
 
-### Employees
+### Users
 
-GET /api/shop/employees
-POST /api/shop/employees
-PUT /api/shop/employees/{id}
+GET /api/shop/users
+POST /api/shop/users
+PUT /api/shop/users/{id}
+DELETE /api/shop/users/{id}
 
-Company Managers can list and manage company managers and branch employees for their company. Branch Employees cannot manage employees.
+Company Managers can list, create, update, and delete company managers and branch users for their company. Branch Employees cannot manage users. The API prevents a manager from deleting their own user account.
 
 ---
 
@@ -186,7 +210,7 @@ PUT /api/admin/packages/{id}
 
 ### Subscription Control
 
-The shop API must block bill creation when the authenticated user's company is suspended or its subscription has expired.
+The shop API must block bill creation when the authenticated user's company is suspended or its current `company_subscriptions` record has expired.
 
 ---
 

@@ -31,7 +31,8 @@ class SubscriptionPackageForm
                     ->minValue(1)
                     ->default(1)
                     ->required(),
-                TextInput::make('max_employees')
+                TextInput::make('max_users')
+                    ->label('Max users')
                     ->numeric()
                     ->minValue(1)
                     ->default(1)
